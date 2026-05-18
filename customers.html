@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="assets/css/style.css">
+<script src="assets/js/tailwind-config.js"></script>
+</head>
+<body class="bg-background text-on-background" data-page="customers">
+<!-- Persistent Sidebar -->
+<div id="sidebar-container"></div>
+<!-- Top App Bar -->
+<div id="header-container"></div>
+<!-- Main Content Canvas -->
+<main class="ml-[260px] pt-24 px-margin-desktop pb-12 min-h-screen">
+<!-- Header Section -->
+<div class="flex justify-between items-center mb-8">
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Danh sách khách hàng</h2>
+<div class="flex items-center gap-3">
+<button class="flex items-center gap-2 px-4 py-2 text-secondary border border-outline-variant/50 rounded-lg hover:bg-subtle-grey transition-colors">
+<span class="material-symbols-outlined text-[20px]" data-icon="download">download</span>
+<span class="font-button">Nhập CSV</span>
+</button>
+<button class="flex items-center gap-2 px-4 py-2 text-secondary border border-outline-variant/50 rounded-lg hover:bg-subtle-grey transition-colors">
+<span class="material-symbols-outlined text-[20px]" data-icon="upload">upload</span>
+<span class="font-button">Xuất CSV</span>
+</button>
+<button class="flex items-center gap-2 px-5 py-2 bg-primary-container text-white rounded-xl shadow-md hover:bg-primary transition-all active:scale-95">
+<span class="material-symbols-outlined text-[20px]" data-icon="add">add</span>
+<span class="font-button">Thêm khách hàng</span>
+</button>
+</div>
+</div>
+<!-- Filter Bar -->
+<div class="bg-surface-container-lowest rounded-[20px] p-6 shadow-[0_10px_30px_rgba(0,0,0,0.04)] mb-8 flex flex-wrap items-center gap-4">
+<div class="flex-1 min-w-[300px] flex items-center bg-subtle-grey px-4 py-3 rounded-xl border border-outline-variant/10">
+<span class="material-symbols-outlined text-secondary mr-3" data-icon="person_search">person_search</span>
+<input class="bg-transparent border-none focus:ring-0 text-body-md w-full" placeholder="Tìm theo tên, số điện thoại hoặc email..." type="text"/>
+</div>
+<div class="flex items-center gap-3">
+<select class="bg-subtle-grey border-none text-body-sm rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary min-w-[160px]">
+<option>Phân khúc: Tất cả</option>
+<option>VIP Gold</option>
+<option>VIP Silver</option>
+<option>Tiềm năng</option>
+</select>
+<select class="bg-subtle-grey border-none text-body-sm rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary min-w-[160px]">
+<option>Sản phẩm: Tất cả</option>
+<option>Trẻ hóa da</option>
+<option>Giảm béo</option>
+<option>Tắm trắng</option>
+</select>
+<select class="bg-subtle-grey border-none text-body-sm rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary min-w-[160px]">
+<option>Nhân viên: Tất cả</option>
+</select>
+<button class="p-3 text-secondary hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="filter_list">filter_list</span>
+</button>
+</div>
+</div>
+<!-- Data Table Container -->
+<div class="bg-surface-container-lowest rounded-[20px] shadow-[0_10px_30px_rgba(0,0,0,0.04)] overflow-hidden">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b border-outline-variant/30 text-secondary font-label-md">
+<th class="px-6 py-5 w-12"><input class="rounded border-outline-variant text-primary focus:ring-primary" type="checkbox"/></th>
+<th class="px-6 py-5">TÊN KHÁCH HÀNG</th>
+<th class="px-6 py-5">CÔNG TY</th>
+<th class="px-6 py-5">PHÂN KHÚC</th>
+<th class="px-6 py-5">SẢN PHẨM QUAN TÂM</th>
+<th class="px-6 py-5">NHÂN VIÊN PTRACH</th>
+<th class="px-6 py-5">NGÀY TẠO</th>
+<th class="px-6 py-5 text-right">HÀNH ĐỘNG</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/10">
+<!-- Row 1 -->
+<tr class="hover:bg-subtle-grey transition-colors group">
+<td class="px-6 py-4"><input class="rounded border-outline-variant text-primary focus:ring-primary" type="checkbox"/></td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<img class="w-10 h-10 rounded-full object-cover" data-alt="Close up portrait of a middle-aged Vietnamese woman with glowing clear skin and a friendly smile. She is wearing a soft silk blouse, standing in a brightly lit, high-end medical clinic with minimalist decor. The lighting is professional and flattering, creating a premium and trustworthy vibe consistent with a luxury medical spa's aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA2_Co_Dbjp3hyn1BSxsd3cTcy91ot7sy4C73LY6ixI0QE3NmhsnSb4TJNeYfnt0LOzKLP0HIL_vgjxUWyi2uz3yth6PYd0dTzMzGxpNwO3w7bzxPgRpLPTeoi-NcHPdj1gTFIBd4NCLBl4Vy6jIRDLn8hmyHDaz08TrhH4aojUWgkNCrKFr3TdCABcEuIlLvi8gFzL2N9eKP61xb96YP8ADPu1hwoN1WkEyb0ag5xhPJojHZLuMQ7E4pXVyZBHpeNf12-dRDZQwA"/>
+<div>
+<p class="font-body-md font-bold text-on-surface">Nguyễn Thị Lan Anh</p>
+<p class="text-xs text-secondary">lananh.nguyen@gmail.com</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 text-body-sm text-on-surface-variant">Vietcombank H.O</td>
+<td class="px-6 py-4">
+<span class="px-3 py-1 rounded-full text-[11px] font-bold bg-primary-container/10 text-primary-container uppercase">VIP Gold</span>
+</td>
+<td class="px-6 py-4 text-body-sm">Liệu trình Thermage FLX</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-tertiary/20 flex items-center justify-center text-[10px] text-tertiary font-bold">ML</div>
+<span class="text-body-sm">Mai Linh</span>
+</div>
+</td>
+<td class="px-6 py-4 text-body-sm text-secondary">12/05/2023</td>
+<td class="px-6 py-4 text-right">
+<button class="text-secondary hover:text-primary transition-colors p-2"><span class="material-symbols-outlined text-[20px]" data-icon="more_vert">more_vert</span></button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-subtle-grey transition-colors group">
+<td class="px-6 py-4"><input class="rounded border-outline-variant text-primary focus:ring-primary" type="checkbox"/></td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<img class="w-10 h-10 rounded-full object-cover" data-alt="Portrait of a professional Vietnamese man in a sharp business casual outfit, reflecting success and modern style. He is set against a clean, architectural interior of a high-end spa facility with soft, recessed lighting. The color palette is composed of warm neutrals and whites, maintaining a sophisticated and clinical yet inviting professional atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBzV2qw7smL6S__wT7Bi5l8KDpZVguPhcouEscEYm4QoA3uvCNsD-ygv7PvhNusXHHlvNh-ptbcit35hVFbcm19aMq-toWMJ6RR5p70W11tEb9xb_fLyxbHmUiHNtFPwmZyB-sxY0Drs43Up7Y8rSVTQCD4DJbaU_waOs3RwO0gt2BpBe3vq88_Lhi4s2Ya1dtcF__m63SSyGUW6RUREIDLtk21KjouD8nAhghtUdPlRcpULjYIuyHePlejtL3i3pM6QdtKkp8Kng"/>
+<div>
+<p class="font-body-md font-bold text-on-surface">Lê Văn Hoàng</p>
+<p class="text-xs text-secondary">hoang.le@vinhomes.vn</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 text-body-sm text-on-surface-variant">Vinhomes Group</td>
+<td class="px-6 py-4">
+<span class="px-3 py-1 rounded-full text-[11px] font-bold bg-status-info/10 text-status-info uppercase">Tiềm năng</span>
+</td>
+<td class="px-6 py-4 text-body-sm">Giảm béo Ultra Slim</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-status-warning/20 flex items-center justify-center text-[10px] text-status-warning font-bold">QB</div>
+<span class="text-body-sm">Quốc Bảo</span>
+</div>
+</td>
+<td class="px-6 py-4 text-body-sm text-secondary">15/05/2023</td>
+<td class="px-6 py-4 text-right">
+<button class="text-secondary hover:text-primary transition-colors p-2"><span class="material-symbols-outlined text-[20px]" data-icon="more_vert">more_vert</span></button>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-subtle-grey transition-colors group">
+<td class="px-6 py-4"><input class="rounded border-outline-variant text-primary focus:ring-primary" type="checkbox"/></td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<img class="w-10 h-10 rounded-full object-cover" data-alt="Elegant Vietnamese woman with a refined aesthetic, wearing delicate jewelry and a clean professional attire. The background is a soft-focus luxury medical spa lobby with translucent glass panels and ambient, warm white lighting. The overall mood is calm, high-end, and perfectly manicured, reflecting a premium skincare client persona." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBi5SmxKaStjWUAVwmJBRQ4udo42iDml_YKXAupP6RTbW4D1UFyD03uH6_qFe7vbGBXtO0AgLEQ6ucbSEytluNUVh-DRzEG7g4ljoZclu3cxVMApKKzFsTvDyM9N2NW8edLaJ_mKXNPI4GLNH5BIUKtRxKWD4YAz5qKpkrgmQ0fmcqUZfZYip7m8dAkFrf6G0Iqo6mQTWQ4Hq1C_uBEl5rOdUzogZp8g4oJbfYqs12Q_g1xrivlQWvQBb4sFx5ipEWnMqH1R4YwZQ"/>
+<div>
+<p class="font-body-md font-bold text-on-surface">Phạm Thu Trang</p>
+<p class="text-xs text-secondary">trang.pham@shopee.com</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 text-body-sm text-on-surface-variant">Shopee Vietnam</td>
+<td class="px-6 py-4">
+<span class="px-3 py-1 rounded-full text-[11px] font-bold bg-secondary-container text-on-secondary-container uppercase">VIP Silver</span>
+</td>
+<td class="px-6 py-4 text-body-sm">Tắm trắng Collagen 4D</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center text-[10px] text-primary font-bold">TH</div>
+<span class="text-body-sm">Thu Hà</span>
+</div>
+</td>
+<td class="px-6 py-4 text-body-sm text-secondary">20/05/2023</td>
+<td class="px-6 py-4 text-right">
+<button class="text-secondary hover:text-primary transition-colors p-2"><span class="material-symbols-outlined text-[20px]" data-icon="more_vert">more_vert</span></button>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-subtle-grey transition-colors group">
+<td class="px-6 py-4"><input class="rounded border-outline-variant text-primary focus:ring-primary" type="checkbox"/></td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<img class="w-10 h-10 rounded-full object-cover" data-alt="Successful Vietnamese male entrepreneur in his late 30s, looking professional and friendly. He is set in a modern, airy office with subtle medical brand elements in the background. The lighting is clear and daylight-balanced, emphasizing a high-standard, sophisticated lifestyle and a focus on wellness and professional presentation." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDPu6C9SU77fsQteZxOmGg3b-yyfursU-aR3oEFIc4PLZAsQ6QV0IRhp3ALuxj4nGp1ZboHsBHwrUJ62X6ptxFt7HxyWmoS2tNnJexn4T-jnzUluXb-xQkM-RlJJ0F6l9XNk4sIhsFqlCLTBMUG7DH2H1s4hBtp6Fr2ooity89SK9ygCxbRiC-kU5x_JzK1j5j9gqFWN7-4mU6-rYq9FiKuppmzA0FpXfMGx8nBajqJPAX28cK4szj7wkVNkBGROyOJ9ORxSBsT6Q"/>
+<div>
+<p class="font-body-md font-bold text-on-surface">Đặng Minh Hùng</p>
+<p class="text-xs text-secondary">hung.dang@techcombank.com</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 text-body-sm text-on-surface-variant">Techcombank</td>
+<td class="px-6 py-4">
+<span class="px-3 py-1 rounded-full text-[11px] font-bold bg-status-info/10 text-status-info uppercase">Tiềm năng</span>
+</td>
+<td class="px-6 py-4 text-body-sm">Cấy căng bóng da Meso</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-tertiary/20 flex items-center justify-center text-[10px] text-tertiary font-bold">ML</div>
+<span class="text-body-sm">Mai Linh</span>
+</div>
+</td>
+<td class="px-6 py-4 text-body-sm text-secondary">22/05/2023</td>
+<td class="px-6 py-4 text-right">
+<button class="text-secondary hover:text-primary transition-colors p-2"><span class="material-symbols-outlined text-[20px]" data-icon="more_vert">more_vert</span></button>
+</td>
+</tr>
+<!-- Row 5 -->
+<tr class="hover:bg-subtle-grey transition-colors group">
+<td class="px-6 py-4"><input class="rounded border-outline-variant text-primary focus:ring-primary" type="checkbox"/></td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<img class="w-10 h-10 rounded-full object-cover" data-alt="A chic and fashionable Vietnamese woman with a radiant complexion, expressing confidence and elegance. She is positioned in a sleek, minimalist medical facility with clean white surfaces and sophisticated glass accents. The environment is flooded with soft, bright light that highlights the premium quality and professional standard of a top-tier aesthetic clinic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDv1DrlYlaLPZ_-PbKTc-sZLJLFU9ACfT1d0FBisAF3kx0JJpBxw1RAaGOOKze8L5Rvh7fuBgcSpK-VtgnAGP50H_Pcl5ma6mx3uaQXjaGmVU9g6UWsD5jeMGfmuLjQWOWvII6tmw2fQRtjjvOmRxdMDEp2BNl2YN36n1L3l0ynT1nQ1pInm46px4rG1DLskBXKxeFhGbzhcjt-cK7MhR_NN7F-0qy2rgFR0PY5viOGXtBlBdmuoLfgjh-4XHngNXPMlboQ8M_SXQ"/>
+<div>
+<p class="font-body-md font-bold text-on-surface">Vũ Kim Chi</p>
+<p class="text-xs text-secondary">chi.vu@lifestyle.vn</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 text-body-sm text-on-surface-variant">Freelancer</td>
+<td class="px-6 py-4">
+<span class="px-3 py-1 rounded-full text-[11px] font-bold bg-primary-container/10 text-primary-container uppercase">VIP Gold</span>
+</td>
+<td class="px-6 py-4 text-body-sm">Trị nám Laser Revlite</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center text-[10px] text-primary font-bold">TH</div>
+<span class="text-body-sm">Thu Hà</span>
+</div>
+</td>
+<td class="px-6 py-4 text-body-sm text-secondary">25/05/2023</td>
+<td class="px-6 py-4 text-right">
+<button class="text-secondary hover:text-primary transition-colors p-2"><span class="material-symbols-outlined text-[20px]" data-icon="more_vert">more_vert</span></button>
+</td>
+</tr>
+<!-- Row 6 -->
+<tr class="hover:bg-subtle-grey transition-colors group">
+<td class="px-6 py-4"><input class="rounded border-outline-variant text-primary focus:ring-primary" type="checkbox"/></td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<img class="w-10 h-10 rounded-full object-cover" data-alt="A polished Vietnamese male executive in his early 40s, showcasing a professional and approachable demeanor. He is standing in a luxury spa reception area featuring soft textures, white marble, and modern minimalist lighting. The entire scene is captured in a high-key, airy style with a palette of crisp whites and muted earthy tones, emphasizing premium service." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDwx4G6rTE1xpfon4D2YwxjZcGXIXSFbRXLPxMYsOb-CBxNTHUJznVkK33bk_j3G0M2MiKaHy45gMu2W0ISW0KIQh7S-baRUPwGLizPfpZPI1BS3VSm0UogN4yVpA_-eC1bDr-cPBQ8kVxlqTOc1dyxKvf9u8ATPOokA28LrUgfhb9o9mLEPtp-sVOYp2ra8QQN72g2pKT45fzOCpjrfoi0bFXoXFEsWdkE0LV2nC5c9KYTLO7ossFKtCFUF8mAyXIpEJIQJs3w2A"/>
+<div>
+<p class="font-body-md font-bold text-on-surface">Hoàng Quốc Bảo</p>
+<p class="text-xs text-secondary">bao.hoang@pwc.com</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 text-body-sm text-on-surface-variant">PwC Vietnam</td>
+<td class="px-6 py-4">
+<span class="px-3 py-1 rounded-full text-[11px] font-bold bg-secondary-container text-on-secondary-container uppercase">VIP Silver</span>
+</td>
+<td class="px-6 py-4 text-body-sm">HIFU nâng cơ mặt</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-status-warning/20 flex items-center justify-center text-[10px] text-status-warning font-bold">QB</div>
+<span class="text-body-sm">Quốc Bảo</span>
+</div>
+</td>
+<td class="px-6 py-4 text-body-sm text-secondary">30/05/2023</td>
+<td class="px-6 py-4 text-right">
+<button class="text-secondary hover:text-primary transition-colors p-2"><span class="material-symbols-outlined text-[20px]" data-icon="more_vert">more_vert</span></button>
+</td>
+</tr>
+</tbody>
+</table>
+<!-- Pagination -->
+<div class="px-6 py-5 flex justify-between items-center border-t border-outline-variant/30">
+<p class="text-body-sm text-secondary">Hiển thị <span class="font-bold text-on-surface">6</span> trên <span class="font-bold text-on-surface">1,248</span> khách hàng</p>
+<div class="flex items-center gap-1">
+<button class="p-2 text-secondary hover:bg-subtle-grey rounded-lg disabled:opacity-30" disabled="">
+<span class="material-symbols-outlined" data-icon="chevron_left">chevron_left</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-lg bg-primary text-white font-button">1</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-subtle-grey text-on-surface font-button">2</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-subtle-grey text-on-surface font-button">3</button>
+<span class="px-2 text-secondary">...</span>
+<button class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-subtle-grey text-on-surface font-button">42</button>
+<button class="p-2 text-secondary hover:bg-subtle-grey rounded-lg">
+<span class="material-symbols-outlined" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+
+    <script src="assets/js/layout.js"></script>
+    <script src="assets/js/app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if(typeof injectLayout === 'function') injectLayout('customers');
+        });
+    </script>
+</body></html>

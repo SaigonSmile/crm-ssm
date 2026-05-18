@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="assets/js/tailwind-config.js"></script>
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="flex min-h-screen" data-page="tasks">
+<!-- SideNavBar -->
+<div id="sidebar-container"></div>
+<!-- Main Content -->
+<main class="ml-[260px] flex-1 flex flex-col min-h-screen">
+<!-- TopAppBar -->
+<div id="header-container"></div>
+<!-- Content Canvas -->
+<div class="mt-16 p-margin-desktop max-w-container-max mx-auto w-full">
+<!-- Header Section -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Công việc</h2>
+<p class="text-body-sm text-secondary mt-1">Quản lý các nhiệm vụ chăm sóc khách hàng hàng ngày.</p>
+</div>
+<button class="bg-[#EC7700] hover:bg-primary-container text-white px-6 py-2.5 rounded-xl font-button text-button flex items-center gap-2 shadow-sm transition-all active:scale-95">
+<span class="material-symbols-outlined">add</span>
+                    Thêm công việc
+                </button>
+</div>
+<!-- Filters & Stats Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-4 gap-gutter mb-8">
+<div class="lg:col-span-3 flex flex-wrap gap-3">
+<button class="px-5 py-2 bg-primary text-white rounded-full font-label-md text-label-md shadow-sm">Tất cả</button>
+<button class="px-5 py-2 bg-white border border-outline-variant text-secondary hover:border-primary hover:text-primary rounded-full font-label-md text-label-md transition-all">Hôm nay</button>
+<button class="px-5 py-2 bg-white border border-outline-variant text-secondary hover:border-primary hover:text-primary rounded-full font-label-md text-label-md transition-all">Quá hạn</button>
+<button class="px-5 py-2 bg-white border border-outline-variant text-secondary hover:border-primary hover:text-primary rounded-full font-label-md text-label-md transition-all">Đã hoàn thành</button>
+</div>
+<div class="flex justify-end items-center gap-4 text-secondary">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[18px]">calendar_today</span>
+<span class="text-body-sm">Tháng 10, 2023</span>
+</div>
+</div>
+</div>
+<!-- Task List Table -->
+<div class="glass-card rounded-[20px] overflow-hidden">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b border-outline-variant/30 text-secondary uppercase font-label-md text-[11px] tracking-wider">
+<th class="py-5 px-6 w-12 text-center"></th>
+<th class="py-5 px-4">Nội dung công việc</th>
+<th class="py-5 px-4">Khách hàng</th>
+<th class="py-5 px-4">Ưu tiên</th>
+<th class="py-5 px-4">Thời hạn</th>
+<th class="py-5 px-6 w-16"></th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/10">
+<!-- Task 1 -->
+<tr class="task-row transition-colors">
+<td class="py-4 px-6 text-center">
+<input class="w-5 h-5 rounded-full border-outline-variant text-primary focus:ring-primary focus:ring-offset-0 transition-all cursor-pointer" type="checkbox"/>
+</td>
+<td class="py-4 px-4">
+<p class="font-body-md text-body-md font-medium text-on-surface">Gửi báo giá Combo Trẻ hóa da "Trân Quý" cho chị Lan Anh</p>
+</td>
+<td class="py-4 px-4">
+<div class="inline-flex items-center px-3 py-1 rounded-full bg-secondary-container/30 text-secondary font-label-md text-label-md">
+                                    Lan Anh
+                                </div>
+</td>
+<td class="py-4 px-4">
+<span class="px-3 py-1 rounded-full bg-[#EF4444]/10 text-[#EF4444] font-label-md text-label-md font-bold">Cao</span>
+</td>
+<td class="py-4 px-4">
+<div class="flex items-center gap-2 text-status-warning">
+<span class="material-symbols-outlined text-[18px]">schedule</span>
+<span class="font-body-sm text-body-sm">15:00 hôm nay</span>
+</div>
+</td>
+<td class="py-4 px-6 text-right">
+<button class="text-secondary hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Task 2 -->
+<tr class="task-row transition-colors">
+<td class="py-4 px-6 text-center">
+<input class="w-5 h-5 rounded-full border-outline-variant text-primary focus:ring-primary focus:ring-offset-0 cursor-pointer" type="checkbox"/>
+</td>
+<td class="py-4 px-4">
+<p class="font-body-md text-body-md font-medium text-on-surface">Gọi xác nhận lịch tư vấn Giảm béo cho chị Trang</p>
+</td>
+<td class="py-4 px-4">
+<div class="inline-flex items-center px-3 py-1 rounded-full bg-secondary-container/30 text-secondary font-label-md text-label-md">
+                                    Chị Trang
+                                </div>
+</td>
+<td class="py-4 px-4">
+<span class="px-3 py-1 rounded-full bg-status-warning/10 text-status-warning font-label-md text-label-md font-bold">Trung bình</span>
+</td>
+<td class="py-4 px-4">
+<div class="flex items-center gap-2 text-secondary">
+<span class="material-symbols-outlined text-[18px]">event</span>
+<span class="font-body-sm text-body-sm">09:30 ngày mai</span>
+</div>
+</td>
+<td class="py-4 px-6 text-right">
+<button class="text-secondary hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Task 3 -->
+<tr class="task-row transition-colors">
+<td class="py-4 px-6 text-center">
+<input class="w-5 h-5 rounded-full border-outline-variant text-primary focus:ring-primary focus:ring-offset-0 cursor-pointer" type="checkbox"/>
+</td>
+<td class="py-4 px-4">
+<p class="font-body-md text-body-md font-medium text-on-surface">Soạn hợp đồng Trẻ hóa da cho Vietcombank</p>
+</td>
+<td class="py-4 px-4">
+<div class="inline-flex items-center px-3 py-1 rounded-full bg-secondary-container/30 text-secondary font-label-md text-label-md">
+                                    Vietcombank
+                                </div>
+</td>
+<td class="py-4 px-4">
+<span class="px-3 py-1 rounded-full bg-[#EF4444]/10 text-[#EF4444] font-label-md text-label-md font-bold">Cao</span>
+</td>
+<td class="py-4 px-4">
+<div class="flex items-center gap-2 text-secondary">
+<span class="material-symbols-outlined text-[18px]">event</span>
+<span class="font-body-sm text-body-sm">17:00 thứ Sáu</span>
+</div>
+</td>
+<td class="py-4 px-6 text-right">
+<button class="text-secondary hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Task 4 -->
+<tr class="task-row transition-colors">
+<td class="py-4 px-6 text-center">
+<input class="w-5 h-5 rounded-full border-outline-variant text-primary focus:ring-primary focus:ring-offset-0 cursor-pointer" type="checkbox"/>
+</td>
+<td class="py-4 px-4">
+<p class="font-body-md text-body-md font-medium text-on-surface">Gửi thông tin liệu trình Trị nám mới cho anh Hùng qua Zalo</p>
+</td>
+<td class="py-4 px-4">
+<div class="inline-flex items-center px-3 py-1 rounded-full bg-secondary-container/30 text-secondary font-label-md text-label-md">
+                                    Anh Hùng
+                                </div>
+</td>
+<td class="py-4 px-4">
+<span class="px-3 py-1 rounded-full bg-status-info/10 text-status-info font-label-md text-label-md font-bold">Thấp</span>
+</td>
+<td class="py-4 px-4">
+<div class="flex items-center gap-2 text-secondary">
+<span class="material-symbols-outlined text-[18px]">event</span>
+<span class="font-body-sm text-body-sm">10:00 ngày mai</span>
+</div>
+</td>
+<td class="py-4 px-6 text-right">
+<button class="text-secondary hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Task 5 -->
+<tr class="task-row transition-colors">
+<td class="py-4 px-6 text-center">
+<input class="w-5 h-5 rounded-full border-outline-variant text-primary focus:ring-primary focus:ring-offset-0 cursor-pointer" type="checkbox"/>
+</td>
+<td class="py-4 px-4">
+<p class="font-body-md text-body-md font-medium text-on-surface">Kiểm tra phản hồi sau buổi tắm trắng đầu tiên của chị Kim Chi</p>
+</td>
+<td class="py-4 px-4">
+<div class="inline-flex items-center px-3 py-1 rounded-full bg-secondary-container/30 text-secondary font-label-md text-label-md">
+                                    Chị Kim Chi
+                                </div>
+</td>
+<td class="py-4 px-4">
+<span class="px-3 py-1 rounded-full bg-status-warning/10 text-status-warning font-label-md text-label-md font-bold">Trung bình</span>
+</td>
+<td class="py-4 px-4">
+<div class="flex items-center gap-2 text-status-warning">
+<span class="material-symbols-outlined text-[18px]">schedule</span>
+<span class="font-body-sm text-body-sm">14:00 hôm nay</span>
+</div>
+</td>
+<td class="py-4 px-6 text-right">
+<button class="text-secondary hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="px-6 py-4 border-t border-outline-variant/30 flex justify-between items-center bg-white/50">
+<span class="text-body-sm text-secondary italic">Hiển thị 5 trên 24 công việc</span>
+<div class="flex gap-2">
+<button class="p-2 border border-outline-variant rounded-lg text-secondary hover:bg-subtle-grey">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<button class="p-2 border border-outline-variant rounded-lg text-secondary hover:bg-subtle-grey">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Contextual Insight (Bento Element) -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter mt-8">
+<div class="glass-card p-6 rounded-[20px] flex items-center gap-6">
+<div class="w-16 h-16 rounded-2xl bg-primary-container/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[32px]">task_alt</span>
+</div>
+<div>
+<h4 class="font-headline-md text-headline-md text-on-surface">Hiệu suất tuần</h4>
+<p class="text-body-sm text-secondary">Bạn đã hoàn thành 85% công việc được giao trong tuần này.</p>
+</div>
+</div>
+<div class="glass-card p-6 rounded-[20px] relative overflow-hidden flex items-center justify-between">
+<div class="z-10">
+<h4 class="font-headline-md text-headline-md text-on-surface">Lưu ý hôm nay</h4>
+<p class="text-body-sm text-secondary">Có 2 lịch tư vấn quan trọng cần xác nhận trước 12:00.</p>
+</div>
+<div class="opacity-10 absolute -right-4 -bottom-4">
+<span class="material-symbols-outlined text-[120px] text-primary">priority_high</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+
+    <script src="assets/js/layout.js"></script>
+    <script src="assets/js/app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if(typeof injectLayout === 'function') injectLayout('tasks');
+        });
+    </script>
+</body></html>

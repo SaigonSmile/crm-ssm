@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Đăng nhập | Saigon Smile Medical CRM</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-container": "#e27e02",
+                    "on-tertiary-container": "#4c2600",
+                    "outline": "#8a7263",
+                    "error-container": "#ffdad6",
+                    "secondary-fixed": "#dee3ea",
+                    "inverse-surface": "#2f3131",
+                    "on-primary-fixed": "#311300",
+                    "on-secondary": "#ffffff",
+                    "error": "#ba1a1a",
+                    "subtle-grey": "#F7F7F7",
+                    "on-error-container": "#93000a",
+                    "tertiary": "#8f4e00",
+                    "primary-container": "#ec7700",
+                    "on-primary-container": "#4f2400",
+                    "surface-dim": "#dadada",
+                    "status-success": "#22C55E",
+                    "status-warning": "#F59E0B",
+                    "on-background": "#1a1c1c",
+                    "tertiary-fixed-dim": "#ffb77b",
+                    "inverse-on-surface": "#f0f1f1",
+                    "on-primary": "#ffffff",
+                    "on-secondary-fixed": "#171c21",
+                    "primary-fixed": "#ffdcc6",
+                    "on-tertiary": "#ffffff",
+                    "surface-variant": "#e2e2e2",
+                    "on-secondary-container": "#60656b",
+                    "secondary-container": "#dee3ea",
+                    "on-secondary-fixed-variant": "#42474d",
+                    "status-info": "#3B82F6",
+                    "inverse-primary": "#ffb786",
+                    "primary": "#964900",
+                    "on-tertiary-fixed": "#2e1500",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-container-highest": "#e2e2e2",
+                    "on-surface": "#1a1c1c",
+                    "secondary": "#5a5f65",
+                    "surface-tint": "#964900",
+                    "primary-fixed-dim": "#ffb786",
+                    "surface": "#f9f9f9",
+                    "surface-container-low": "#f3f3f4",
+                    "surface-bright": "#f9f9f9",
+                    "secondary-fixed-dim": "#c2c7ce",
+                    "surface-container-high": "#e8e8e8",
+                    "on-error": "#ffffff",
+                    "surface-container": "#eeeeee",
+                    "on-primary-fixed-variant": "#723600",
+                    "tertiary-fixed": "#ffdcc2",
+                    "glass-surface": "rgba(255, 255, 255, 0.5)",
+                    "on-surface-variant": "#574336",
+                    "on-tertiary-fixed-variant": "#6d3a00",
+                    "status-error": "#EF4444",
+                    "background": "#f9f9f9",
+                    "outline-variant": "#dec1b0"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin-mobile": "16px",
+                    "container-max": "1440px",
+                    "gutter": "24px",
+                    "margin-desktop": "32px",
+                    "sidebar-width": "260px"
+            },
+            "fontFamily": {
+                    "headline-lg": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "button": ["Inter"],
+                    "headline-xl": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "label-md": ["Inter"],
+                    "body-md": ["Inter"]
+            },
+            "fontSize": {
+                    "headline-lg": ["28px", {"lineHeight": "1.4", "fontWeight": "300"}],
+                    "body-lg": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "button": ["14px", {"lineHeight": "1", "fontWeight": "600"}],
+                    "headline-xl": ["32px", {"lineHeight": "1.4", "letterSpacing": "-0.02em", "fontWeight": "300"}],
+                    "headline-md": ["22px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                    "body-sm": ["14px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "label-md": ["12px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "body-md": ["15px", {"lineHeight": "1.6", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-overlay {
+            background: linear-gradient(135deg, rgba(236, 119, 0, 0.08) 0%, rgba(255, 255, 255, 0.05) 100%);
+            backdrop-filter: blur(4px);
+        }
+        .input-underline {
+            border: none;
+            border-bottom: 1px solid #e2e2e2;
+            background: transparent;
+            padding-left: 0;
+            padding-right: 0;
+            transition: border-color 0.3s ease;
+        }
+        .input-underline:focus {
+            outline: none;
+            box-shadow: none;
+            border-bottom: 2px solid #EC7700;
+        }
+    </style>
+</head>
+<body class="bg-white font-[Inter] overflow-hidden">
+<div class="flex h-screen w-full">
+<!-- Left Side: Visual Background (55%) -->
+<div class="hidden lg:block lg:w-[55%] relative overflow-hidden">
+<div class="absolute inset-0 bg-center bg-cover" data-alt="A luxurious high-end medical spa interior with warm ambient lighting." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC-brfZbu-i4pvU6FzvwU5jCMCLcciC43z4JAiAYeNqxLlgU5znrShV0YANranI1EjLnagp-JJd2CIh5Qrl6D2MOBdz7STaZ2O6ixbenZzOT6arvfa8E_cULpNnS4JjtiRCDCUQ9YNAwIn7-AIE-FaLxGCrKYzhwEwaYIAGjrPKZEyw43bzdkswphVCtBYd9xVo-EAa-7KYLJCJsodZPED17IO_GSI15oAFNzHvX0y5zLohEyaFf8g3b5e-cagwrrnvgp8Qg4zWyg');">
+</div>
+<!-- Gradient Overlay -->
+<div class="absolute inset-0 glass-overlay"></div>
+<!-- Branding Text Overlay -->
+<div class="absolute bottom-12 left-12 max-w-md z-10">
+<img alt="Saigon Smile Medical White Vertical Logo" class="h-32 w-auto object-contain mb-6 drop-shadow-md" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD3kd7gj433fOpCyrcgn45IprYuwoXr7WZIe1tEACfbo7ECoZWu0iTl1XvKpqPxypw4R69zvmZVSLpy-0xGOt2nq60DPGSF863fZpkIdpdyfq7OefuoKvpwjMMJHons9vDHxIxAR17ElM4LvVeCe9F7XvXcD6jGrNheQymY-LVB5HGVhvc9MDHSDzir8kuOo1vUIXgD4mAAaADHRghVapeONy7S_ZZkavkZiiq3UVV5y3LIdPeyNURqMSFF2RLr0kch4C4X_1uG1w"/>
+<p class="text-white/90 text-lg font-light">Nơi hội ngộ của công nghệ y khoa hiện đại và dịch vụ chăm sóc cao cấp.</p>
+</div>
+</div>
+<!-- Right Side: Login Form (45%) -->
+<div class="w-full lg:w-[45%] flex flex-col justify-center items-center px-8 sm:px-16 md:px-24 bg-white relative">
+<div class="w-full max-w-[400px] flex flex-col">
+<!-- Logo -->
+<div class="flex justify-center mb-10">
+<img alt="Saigon Smile Medical Vertical Logo with Slogan" class="h-36 w-auto object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCFvEfmkEQTVPmCFkj_lPyQiwFCxkZydlkELK4enw-gaDsdEcC9pt-PRitpMF9NiYYIWWbXcNHISwEGjxSBlcEXnlu19VYMOgMsKQXB5QJymURd_Nz1QBKYwi-VMpfesYWc3ztz7hrSibb5Usl63nQ_l8SiGoxEeY6nmIrTsONGo-onckn5FyxhfKJmzi3xc0BJogK5hGwiUWF2cZUxE_NzR__NcY_VYXfE7NFIoUCjBkmXGvvThqmmqaM5IRQ0KDsBiQcqRQcMHQ"/>
+</div>
+<!-- Header Texts -->
+<div class="text-center mb-10">
+<h2 class="text-[#54595F] text-[28px] font-light leading-tight">Chào mừng trở lại</h2>
+<p class="text-secondary text-sm font-normal mt-2">Đăng nhập để tiếp tục quản lý</p>
+</div>
+<!-- Form -->
+<form class="space-y-8" onsubmit="return false;">
+<!-- Email Input -->
+<div class="flex flex-col gap-2">
+<label class="text-on-surface-variant text-[12px] uppercase tracking-wider font-semibold">Email</label>
+<input class="input-underline w-full py-3 text-on-surface text-body-md placeholder:text-secondary-fixed-dim" placeholder="Email công ty" type="email"/>
+</div>
+<!-- Password Input -->
+<div class="flex flex-col gap-2 relative">
+<label class="text-on-surface-variant text-[12px] uppercase tracking-wider font-semibold">Mật khẩu</label>
+<div class="relative flex items-center">
+<input class="input-underline w-full py-3 text-on-surface text-body-md placeholder:text-secondary-fixed-dim" placeholder="Mật khẩu" type="password"/>
+<button class="absolute right-0 text-secondary hover:text-primary transition-colors" type="button">
+<span class="material-symbols-outlined">visibility</span>
+</button>
+</div>
+</div>
+<!-- Forgot Password Link -->
+<div class="flex justify-end">
+<a class="text-[#EC7700] text-sm font-medium hover:underline" href="#">Quên mật khẩu?</a>
+</div>
+<!-- Login Button -->
+<button class="w-full bg-[#EC7700] hover:bg-[#d46a00] text-white py-4 rounded-[12px] text-button uppercase tracking-widest transition-all shadow-md active:scale-[0.98]" type="submit">
+                        Đăng nhập
+                    </button>
+<!-- Divider -->
+<div class="relative flex items-center py-4">
+<div class="flex-grow border-t border-surface-variant"></div>
+<span class="flex-shrink mx-4 text-secondary text-[12px] font-medium uppercase tracking-widest">hoặc</span>
+<div class="flex-grow border-t border-surface-variant"></div>
+</div>
+<!-- Social Login -->
+<button class="w-full flex items-center justify-center gap-3 bg-white border border-secondary/20 py-4 rounded-[12px] hover:bg-surface-container-low transition-all" type="button">
+<img alt="Google Icon" class="w-5 h-5" src="https://lh3.googleusercontent.com/aida-public/AB6AXuALV8eeG2oCUlapu7Uo15PWfPDx0z4vsDOvIwM8zw4P-661case2gOwsvsyCNoTRDSFwH-HhwXIjAXKDNFtxgpv4cJRLqSicMJSs7ZS0PqHAfdsS7rCkJ4a7lMite54zWLutCIIzxOSzvSFYjoLxkRPijOcrbhoCU556MrOy18xT_4wBl7lLqXfUJPeLiRvAd7MU6FJe5CEyFb5ZssO7L0FUhKX-ZXqktBid37fRe_CL6V1jA8BnqDtFyTnulYjqYqWn_dD4y8I-Q"/>
+<span class="text-[#54595F] text-button font-medium">Đăng nhập với Google</span>
+</button>
+</form>
+<!-- Footer -->
+<div class="mt-16 text-center">
+<p class="text-secondary-fixed-dim text-[11px] font-normal">
+                        © 2025 Saigon Smile Medical. All rights reserved.
+                    </p>
+</div>
+</div>
+</div>
+</div>
+</body></html>
