@@ -91,7 +91,7 @@
 </div>
 </section>
 <!-- Card: Bảo mật -->
-<section class="glass-card p-8">
+<section class="glass-card p-8 hidden">
 <h2 class="font-headline-md text-headline-md text-on-surface font-semibold mb-6">Bảo mật tài khoản</h2>
 <div class="flex flex-col gap-6">
 <div class="flex justify-between items-center py-4 border-b border-outline-variant/20">
@@ -124,67 +124,25 @@
 </div>
 </section>
 <!-- Card: Quản lý nhân viên Preview -->
-<section class="glass-card p-8">
+<section class="glass-card p-8 hidden">
 <div class="flex justify-between items-center mb-6">
 <div>
 <h2 class="font-headline-md text-headline-md text-on-surface font-semibold">Quản lý nhân viên</h2>
 <p class="text-body-sm text-secondary">Danh sách nhân viên đang hoạt động tại chi nhánh của bạn.</p>
 </div>
-<button class="text-primary font-button flex items-center gap-1 hover:underline">
-                                Xem tất cả <span class="material-symbols-outlined text-sm" data-icon="arrow_forward">arrow_forward</span>
-</button>
 </div>
 <div class="overflow-hidden rounded-xl border border-outline-variant/30">
 <table class="w-full text-left border-collapse">
 <thead class="bg-subtle-grey">
 <tr>
 <th class="px-6 py-4 font-label-md text-label-md text-secondary">NHÂN VIÊN</th>
-<th class="px-6 py-4 font-label-md text-label-md text-secondary">CHUYÊN MÔN</th>
+<th class="px-6 py-4 font-label-md text-label-md text-secondary">VAI TRÒ</th>
 <th class="px-6 py-4 font-label-md text-label-md text-secondary">TRẠNG THÁI</th>
 <th class="px-6 py-4 font-label-md text-label-md text-secondary">HÀNH ĐỘNG</th>
 </tr>
 </thead>
 <tbody class="divide-y divide-outline-variant/20">
-<tr class="hover:bg-subtle-grey/50 transition-colors">
-<td class="px-6 py-4">
-<div class="flex items-center gap-3">
-<img alt="Employee" class="w-8 h-8 rounded-full object-cover" data-alt="A portrait of a senior consultant at Saigon Smile Medical. She has a professional and trustworthy demeanor, styled with subtle makeup and a clinical uniform. The image uses soft studio lighting and a clean, minimalist background that complements the brand's premium aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCHFQvFHylWtL7FlEeAsvMORYXEcBmzL1I3Ks7fBjObubbQCvnJqi-wOcxaMYe-sF9UOikOmWa7ZCv8LTA4Onc9v4x2BtF_aLjudEQyxKGOaVT-NalATIKouNicP4HQtGs9G5r8_TQ9DvDXkSxaJbQ9-5K9g6xQO_jA4n2viMwsVAv8cHSS5Co0AWPpf_aiWN7Ak57hP_8xf9BWhk6j3yRbwsjwNO3wwrFHQ4W3MGjH8UcAySyd_LsJ-3p_0HTK4vDkqwzCpSM9sg"/>
-<div>
-<p class="font-body-md font-medium">Lê Thị Tuyết</p>
-<p class="text-[11px] text-secondary">tuyet.lt@saigonsmile.vn</p>
-</div>
-</div>
-</td>
-<td class="px-6 py-4 text-body-sm text-secondary">Chăm sóc da mặt</td>
-<td class="px-6 py-4">
-<span class="px-3 py-1 bg-status-success/10 text-status-success text-[10px] font-bold rounded-full uppercase tracking-wider">Đang làm</span>
-</td>
-<td class="px-6 py-4">
-<button class="text-secondary hover:text-primary transition-colors">
-<span class="material-symbols-outlined text-lg" data-icon="more_vert">more_vert</span>
-</button>
-</td>
-</tr>
-<tr class="hover:bg-subtle-grey/50 transition-colors">
-<td class="px-6 py-4">
-<div class="flex items-center gap-3">
-<img alt="Employee" class="w-8 h-8 rounded-full object-cover" data-alt="A male medical specialist at Saigon Smile Medical. He is wearing a modern blue medical tunic, standing in a brightly lit hallway of a luxury medical facility. The image captures a sense of professionalism and clinical precision through sharp focus and clean lines." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDX0fJ98rS0eIposFgPQzCO1ceeqSGE8f90YMt4kLivjbjM1BYLHIT8dNsTy1rsZRPZ8BEr3UyC3xV0tT_K_AxPzcYtZvGycM77d_WnfdpM5_avpzq7o5ZTMVg_FzX1fSkC7A48ohNrMYAiKQkdWsz_JJH203xoWE5rpEn9PTwOswakAjvnKrPus484TRdSMRaR536ecJ5xp6wOt7f9LzebLrUQHD6WBLXFRhG1rLhNzbkZ1VsMEJCya5clCe8rGxCgunFHaRgMsQ"/>
-<div>
-<p class="font-body-md font-medium">Trần Văn Nam</p>
-<p class="text-[11px] text-secondary">nam.tv@saigonsmile.vn</p>
-</div>
-</div>
-</td>
-<td class="px-6 py-4 text-body-sm text-secondary">Trị liệu công nghệ cao</td>
-<td class="px-6 py-4">
-<span class="px-3 py-1 bg-status-warning/10 text-status-warning text-[10px] font-bold rounded-full uppercase tracking-wider">Nghỉ phép</span>
-</td>
-<td class="px-6 py-4">
-<button class="text-secondary hover:text-primary transition-colors">
-<span class="material-symbols-outlined text-lg" data-icon="more_vert">more_vert</span>
-</button>
-</td>
-</tr>
+<!-- Dynamic rows injected here -->
 </tbody>
 </table>
 </div>
@@ -196,9 +154,15 @@
 
     <script src="assets/js/layout.js"></script>
     <script src="assets/js/app.js"></script>
+    <script src="assets/js/modules/settings.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            if(typeof injectLayout === 'function') injectLayout('settings');
+        document.addEventListener('DOMContentLoaded', async () => {
+            if(typeof injectLayout === 'function') {
+                await injectLayout('settings');
+                if(typeof SettingsModule !== 'undefined') {
+                    await SettingsModule.init();
+                }
+            }
         });
     </script>
 </body></html>

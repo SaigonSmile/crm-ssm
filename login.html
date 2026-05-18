@@ -9,6 +9,13 @@
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <script src="assets/js/tailwind-config.js"></script>
 <link rel="stylesheet" href="assets/css/style.css">
+
+<!-- Load Supabase, Config, Toast, and AuthService -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/js/config.js"></script>
+<script src="assets/js/auth/supabase.js"></script>
+<script src="assets/js/components/toast.js"></script>
+<script src="assets/js/auth/auth.js"></script>
 </head>
 <body class="bg-white font-[Inter] overflow-hidden">
 <div class="flex h-screen w-full">
@@ -37,30 +44,30 @@
 <p class="text-secondary text-sm font-normal mt-2">Đăng nhập để tiếp tục quản lý</p>
 </div>
 <!-- Form -->
-<form class="space-y-8" onsubmit="return false;">
+<form class="space-y-8" onsubmit="handleLoginSubmit(event); return false;">
 <!-- Email Input -->
 <div class="flex flex-col gap-2">
 <label class="text-on-surface-variant text-[12px] uppercase tracking-wider font-semibold">Email</label>
-<input class="input-underline w-full py-3 text-on-surface text-body-md placeholder:text-secondary-fixed-dim" placeholder="Email công ty" type="email"/>
+<input id="email-input" class="input-underline w-full py-3 text-on-surface text-body-md placeholder:text-secondary-fixed-dim" placeholder="Email công ty" type="email" required/>
 </div>
 <!-- Password Input -->
 <div class="flex flex-col gap-2 relative">
 <label class="text-on-surface-variant text-[12px] uppercase tracking-wider font-semibold">Mật khẩu</label>
 <div class="relative flex items-center">
-<input class="input-underline w-full py-3 text-on-surface text-body-md placeholder:text-secondary-fixed-dim" placeholder="Mật khẩu" type="password"/>
-<button class="absolute right-0 text-secondary hover:text-primary transition-colors" type="button">
-<span class="material-symbols-outlined">visibility</span>
+<input id="password-input" class="input-underline w-full py-3 text-on-surface text-body-md placeholder:text-secondary-fixed-dim" placeholder="Mật khẩu" type="password" required/>
+<button class="absolute right-0 text-secondary hover:text-primary transition-colors" type="button" onclick="togglePasswordVisibility()">
+<span id="visibility-icon" class="material-symbols-outlined">visibility</span>
 </button>
 </div>
 </div>
 <!-- Forgot Password Link -->
 <div class="flex justify-end">
-<a class="text-[#EC7700] text-sm font-medium hover:underline" href="dashboard.html">Quên mật khẩu?</a>
+<a class="text-[#EC7700] text-sm font-medium hover:underline" href="javascript:void(0)" onclick="handleForgotPassword()">Quên mật khẩu?</a>
 </div>
 <!-- Login Button -->
-<button class="w-full bg-[#EC7700] hover:bg-[#d46a00] text-white py-4 rounded-[12px] text-button uppercase tracking-widest transition-all shadow-md active:scale-[0.98]" type="button" onclick="window.location.href='dashboard.html'">
-                        Đăng nhập
-                    </button>
+<button id="login-submit-btn" class="w-full bg-[#EC7700] hover:bg-[#d46a00] text-white py-4 rounded-[12px] text-button uppercase tracking-widest transition-all shadow-md active:scale-[0.98] flex items-center justify-center gap-2" type="submit">
+    <span>Đăng nhập</span>
+</button>
 <!-- Divider -->
 <div class="relative flex items-center py-4">
 <div class="flex-grow border-t border-surface-variant"></div>
@@ -68,7 +75,7 @@
 <div class="flex-grow border-t border-surface-variant"></div>
 </div>
 <!-- Social Login -->
-<button class="w-full flex items-center justify-center gap-3 bg-white border border-secondary/20 py-4 rounded-[12px] hover:bg-surface-container-low transition-all" type="button">
+<button class="w-full flex items-center justify-center gap-3 bg-white border border-secondary/20 py-4 rounded-[12px] hover:bg-surface-container-low transition-all" type="button" onclick="AuthService.signInWithGoogle()">
 <img alt="Google Icon" class="w-5 h-5" src="https://lh3.googleusercontent.com/aida-public/AB6AXuALV8eeG2oCUlapu7Uo15PWfPDx0z4vsDOvIwM8zw4P-661case2gOwsvsyCNoTRDSFwH-HhwXIjAXKDNFtxgpv4cJRLqSicMJSs7ZS0PqHAfdsS7rCkJ4a7lMite54zWLutCIIzxOSzvSFYjoLxkRPijOcrbhoCU556MrOy18xT_4wBl7lLqXfUJPeLiRvAd7MU6FJe5CEyFb5ZssO7L0FUhKX-ZXqktBid37fRe_CL6V1jA8BnqDtFyTnulYjqYqWn_dD4y8I-Q"/>
 <span class="text-[#54595F] text-button font-medium">Đăng nhập với Google</span>
 </button>
@@ -76,10 +83,65 @@
 <!-- Footer -->
 <div class="mt-16 text-center">
 <p class="text-secondary-fixed-dim text-[11px] font-normal">
-                        © 2025 Saigon Smile Medical. All rights reserved.
-                    </p>
+    © 2025 Saigon Smile Medical. All rights reserved.
+</p>
 </div>
 </div>
 </div>
 </div>
+
+<script>
+    // Kiểm tra đăng nhập khi mở trang
+    document.addEventListener('DOMContentLoaded', () => {
+        AuthService.checkSession();
+    });
+
+    // Bật/tắt hiện mật khẩu
+    function togglePasswordVisibility() {
+        const passwordInput = document.getElementById('password-input');
+        const visibilityIcon = document.getElementById('visibility-icon');
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            visibilityIcon.textContent = 'visibility_off';
+        } else {
+            passwordInput.type = 'password';
+            visibilityIcon.textContent = 'visibility';
+        }
+    }
+
+    // Xử lý nộp form đăng nhập
+    async function handleLoginSubmit(event) {
+        event.preventDefault();
+        const email = document.getElementById('email-input').value.trim();
+        const password = document.getElementById('password-input').value;
+        const submitBtn = document.getElementById('login-submit-btn');
+
+        if (!email || !password) {
+            showToast('Vui lòng điền đầy đủ thông tin!', 'warning');
+            return;
+        }
+
+        // Đổi trạng thái nút
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = `<span class="animate-spin material-symbols-outlined">sync</span> <span>Đang đăng nhập...</span>`;
+
+        const result = await AuthService.signInWithEmail(email, password);
+
+        if (result.success) {
+            showToast('Đăng nhập thành công!', 'success');
+            setTimeout(() => {
+                window.location.href = 'dashboard.html';
+            }, 800);
+        } else {
+            showToast(result.error || 'Email hoặc mật khẩu không chính xác.', 'error');
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = `<span>Đăng nhập</span>`;
+        }
+    }
+
+    // Xử lý quên mật khẩu
+    function handleForgotPassword() {
+        showToast('Vui lòng liên hệ Quản trị viên chi nhánh để đặt lại mật khẩu của bạn.', 'info');
+    }
+</script>
 </body></html>

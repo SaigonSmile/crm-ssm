@@ -1,232 +1,64 @@
-<html lang="vi"><head></head><body class="bg-background text-on-background font-body-md overflow-hidden" data-page="leads">```html
-
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<script src="assets/js/tailwind-config.js"></script>
-<link rel="stylesheet" href="assets/css/style.css">
-<!-- SideNavBar Anchor -->
-<div id="sidebar-container"></div>
-<!-- TopAppBar Anchor -->
-<div id="header-container"></div>
-<!-- Main Content Canvas -->
-<main class="ml-[260px] pt-16 h-screen flex flex-col bg-background">
-<!-- Screen Header -->
-<div class="px-margin-desktop py-8 flex justify-between items-end">
-<div>
-<nav class="flex items-center gap-2 text-label-md text-secondary mb-2">
-<span class="">CRM</span>
-<span class="material-symbols-outlined text-[14px]">chevron_right</span>
-<span class="">Cơ hội bán hàng</span>
-</nav>
-<h2 class="font-headline-lg text-headline-lg text-on-background">Cơ hội bán hàng</h2>
-</div>
-<div class="flex items-center gap-3">
-<button class="flex items-center gap-2 px-5 py-2.5 border border-outline-variant/40 rounded-xl text-secondary hover:bg-white transition-all card-shadow">
-<span class="material-symbols-outlined text-[20px]">filter_list</span>
-<span class="font-button">Lọc</span>
-</button>
-<button class="flex items-center gap-2 px-6 py-2.5 bg-primary-container text-white rounded-[12px] font-button shadow-lg shadow-primary-container/20 hover:scale-[1.02] active:scale-95 transition-all">
-<span class="material-symbols-outlined text-[20px]">add</span>
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Cơ hội bán hàng | Saigon Smile Medical CRM</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <script src="assets/js/tailwind-config.js"></script>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="bg-background text-on-background font-body-md overflow-hidden" data-page="leads">
+    <!-- SideNavBar Anchor -->
+    <div id="sidebar-container"></div>
+    <!-- TopAppBar Anchor -->
+    <div id="header-container"></div>
+    
+    <!-- Main Content Canvas -->
+    <main class="ml-[260px] pt-16 h-screen flex flex-col bg-background">
+        <!-- Screen Header -->
+        <div class="px-margin-desktop py-8 flex justify-between items-end">
+            <div>
+                <nav class="flex items-center gap-2 text-label-md text-secondary mb-2">
+                    <span class="">CRM</span>
+                    <span class="material-symbols-outlined text-[14px]">chevron_right</span>
+                    <span class="">Cơ hội bán hàng</span>
+                </nav>
+                <h2 class="font-headline-lg text-headline-lg text-on-background">Cơ hội bán hàng</h2>
+            </div>
+            <div class="flex items-center gap-3">
+                <button id="filter-lead-btn" class="flex items-center gap-2 px-5 py-2.5 border border-outline-variant/40 rounded-xl text-secondary hover:bg-white transition-all card-shadow">
+                    <span class="material-symbols-outlined text-[20px]">filter_list</span>
+                    <span class="font-button">Lọc</span>
+                </button>
+                <button id="add-lead-btn" class="flex items-center gap-2 px-6 py-2.5 bg-primary-container text-white rounded-[12px] font-button shadow-lg shadow-primary-container/20 hover:scale-[1.02] active:scale-95 transition-all">
+                    <span class="material-symbols-outlined text-[20px]">add</span>
                     Thêm cơ hội
                 </button>
-</div>
-</div>
-<!-- Kanban Board Area -->
-<div class="flex-1 px-margin-desktop pb-8 overflow-x-auto kanban-scroll">
-<div class="flex gap-gutter h-full min-w-max">
-<!-- Column: Mới nhận -->
-<div class="w-[320px] bg-[#F8F8F8] rounded-[16px] flex flex-col p-4">
-<div class="flex items-center justify-between mb-4 px-1">
-<h3 class="font-semibold text-secondary flex items-center gap-2">
-                            Mới nhận
-                            <span class="bg-primary-container/10 text-primary-container text-[11px] px-2 py-0.5 rounded-full font-bold">1</span>
-</h3>
-<span class="material-symbols-outlined text-secondary/40 text-[20px] cursor-pointer">more_horiz</span>
-</div>
-<div class="space-y-4">
-<div class="bg-white p-4 rounded-[20px] card-shadow border border-white/50 group cursor-pointer hover:border-primary-container/30 transition-all">
-<div class="flex justify-between items-start mb-3">
-<span class="bg-status-info/10 text-status-info text-[10px] px-2 py-1 rounded-full font-bold uppercase tracking-tight">Khách mới</span>
-<span class="text-secondary/40 material-symbols-outlined text-[18px]">drag_indicator</span>
-</div>
-<p class="font-semibold text-on-surface mb-1 group-hover:text-primary transition-colors">Đặng Minh Hùng</p>
-<p class="text-body-sm text-secondary mb-3">Masan Group</p>
-<div class="flex items-center gap-2 text-[12px] text-on-surface-variant bg-surface-container-low p-2 rounded-lg mb-4">
-<span class="material-symbols-outlined text-[16px]">medical_services</span>
-                                Trị nám &amp; Chăm sóc da
-                            </div>
-<div class="flex justify-between items-center border-t border-outline-variant/20 pt-3">
-<span class="text-primary font-bold">15.500.000 VND</span>
-<div class="flex -space-x-2">
-<div class="w-6 h-6 rounded-full bg-surface-container border-2 border-white flex items-center justify-center text-[10px]">TH</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<!-- Column: Đang liên hệ -->
-<div class="w-[320px] bg-[#F8F8F8] rounded-[16px] flex flex-col p-4">
-<div class="flex items-center justify-between mb-4 px-1">
-<h3 class="font-semibold text-secondary flex items-center gap-2">
-                            Đang liên hệ
-                            <span class="bg-primary-container/10 text-primary-container text-[11px] px-2 py-0.5 rounded-full font-bold">2</span>
-</h3>
-<span class="material-symbols-outlined text-secondary/40 text-[20px]">more_horiz</span>
-</div>
-<div class="space-y-4">
-<div class="bg-white p-4 rounded-[20px] card-shadow border border-white/50 group cursor-pointer hover:border-primary-container/30 transition-all">
-<div class="flex justify-between items-start mb-3">
-<span class="bg-status-warning/10 text-status-warning text-[10px] px-2 py-1 rounded-full font-bold uppercase tracking-tight">Tiềm năng cao</span>
-<span class="text-secondary/40 material-symbols-outlined text-[18px]">drag_indicator</span>
-</div>
-<p class="font-semibold text-on-surface mb-1 group-hover:text-primary transition-colors">Phạm Thu Trang</p>
-<p class="text-body-sm text-secondary mb-3">FPT Software</p>
-<div class="flex items-center gap-2 text-[12px] text-on-surface-variant bg-surface-container-low p-2 rounded-lg mb-4">
-<span class="material-symbols-outlined text-[16px]">fitness_center</span>
-                                Giảm béo chuyên sâu
-                            </div>
-<div class="flex justify-between items-center border-t border-outline-variant/20 pt-3">
-<span class="text-primary font-bold">22.000.000 VND</span>
-<div class="w-6 h-6 rounded-full bg-surface-container border-2 border-white flex items-center justify-center text-[10px]">PT</div>
-</div>
-</div>
-<div class="bg-white p-4 rounded-[20px] card-shadow border border-white/50 group cursor-pointer hover:border-primary-container/30 transition-all">
-<div class="flex justify-between items-start mb-3">
-<span class="bg-secondary-container/50 text-secondary text-[10px] px-2 py-1 rounded-full font-bold uppercase tracking-tight">Đối tác</span>
-<span class="text-secondary/40 material-symbols-outlined text-[18px]">drag_indicator</span>
-</div>
-<p class="font-semibold text-on-surface mb-1 group-hover:text-primary transition-colors">Hoàng Quốc Bảo</p>
-<p class="text-body-sm text-secondary mb-3">Hòa Phát</p>
-<div class="flex items-center gap-2 text-[12px] text-on-surface-variant bg-surface-container-low p-2 rounded-lg mb-4">
-<span class="material-symbols-outlined text-[16px]">monitor_heart</span>
-                                Sức khỏe tổng quát &amp; Ultherapy
-                            </div>
-<div class="flex justify-between items-center border-t border-outline-variant/20 pt-3">
-<span class="text-primary font-bold">28.000.000 VND</span>
-<div class="w-6 h-6 rounded-full bg-surface-container border-2 border-white flex items-center justify-center text-[10px]">QB</div>
-</div>
-</div>
-</div>
-</div>
-<!-- Column: Đã tư vấn -->
-<div class="w-[320px] bg-[#F8F8F8] rounded-[16px] flex flex-col p-4">
-<div class="flex items-center justify-between mb-4 px-1">
-<h3 class="font-semibold text-secondary flex items-center gap-2">
-                            Đã tư vấn
-                            <span class="bg-primary-container/10 text-primary-container text-[11px] px-2 py-0.5 rounded-full font-bold">1</span>
-</h3>
-<span class="material-symbols-outlined text-secondary/40 text-[20px]">more_horiz</span>
-</div>
-<div class="bg-white p-4 rounded-[20px] card-shadow border border-white/50 group cursor-pointer hover:border-primary-container/30 transition-all">
-<div class="flex justify-between items-start mb-3">
-<span class="bg-primary-container/10 text-primary-container text-[10px] px-2 py-1 rounded-full font-bold uppercase tracking-tight">VIP Diamond</span>
-<span class="text-secondary/40 material-symbols-outlined text-[18px]">drag_indicator</span>
-</div>
-<p class="font-semibold text-on-surface mb-1 group-hover:text-primary transition-colors">Nguyễn Thị Lan Anh</p>
-<p class="text-body-sm text-secondary mb-3">Vingroup</p>
-<div class="flex items-center gap-2 text-[12px] text-on-surface-variant bg-surface-container-low p-2 rounded-lg mb-4">
-<span class="material-symbols-outlined text-[16px]">auto_awesome</span>
-                            Trẻ hóa da &amp; Trẻ hóa da
-                        </div>
-<div class="flex justify-between items-center border-t border-outline-variant/20 pt-3">
-<span class="text-primary font-bold">35.000.000 VND</span>
-<div class="w-6 h-6 rounded-full bg-surface-container border-2 border-white flex items-center justify-center text-[10px]">LA</div>
-</div>
-</div>
-</div>
-<!-- Column: Chờ đặt lịch -->
-<div class="w-[320px] bg-[#F8F8F8] rounded-[16px] flex flex-col p-4">
-<div class="flex items-center justify-between mb-4 px-1">
-<h3 class="font-semibold text-secondary flex items-center gap-2">
-                            Chờ đặt lịch
-                            <span class="bg-primary-container/10 text-primary-container text-[11px] px-2 py-0.5 rounded-full font-bold">1</span>
-</h3>
-<span class="material-symbols-outlined text-secondary/40 text-[20px]">more_horiz</span>
-</div>
-<div class="bg-white p-4 rounded-[20px] card-shadow border border-white/50 group cursor-pointer hover:border-primary-container/30 transition-all">
-<div class="flex justify-between items-start mb-3">
-<span class="bg-status-success/10 text-status-success text-[10px] px-2 py-1 rounded-full font-bold uppercase tracking-tight">VIP Platinum</span>
-<span class="text-secondary/40 material-symbols-outlined text-[18px]">drag_indicator</span>
-</div>
-<p class="font-semibold text-on-surface mb-1 group-hover:text-primary transition-colors">Vũ Kim Chi</p>
-<p class="text-body-sm text-secondary mb-3">Vietnam Airlines</p>
-<div class="flex items-center gap-2 text-[12px] text-on-surface-variant bg-surface-container-low p-2 rounded-lg mb-4">
-<span class="material-symbols-outlined text-[16px]">flare</span>
-                            Làm trắng da &amp; Tắm trắng Collagen 4D
-                        </div>
-<div class="flex justify-between items-center border-t border-outline-variant/20 pt-3">
-<span class="text-primary font-bold">42.000.000 VND</span>
-<div class="w-6 h-6 rounded-full bg-surface-container border-2 border-white flex items-center justify-center text-[10px]">KC</div>
-</div>
-</div>
-</div>
-<!-- Column: Đã đặt lịch -->
-<div class="w-[320px] bg-[#F8F8F8] rounded-[16px] flex flex-col p-4">
-<div class="flex items-center justify-between mb-4 px-1">
-<h3 class="font-semibold text-secondary flex items-center gap-2">
-                            Đã đặt lịch
-                            <span class="bg-primary-container/10 text-primary-container text-[11px] px-2 py-0.5 rounded-full font-bold">1</span>
-</h3>
-<span class="material-symbols-outlined text-secondary/40 text-[20px]">more_horiz</span>
-</div>
-<div class="bg-white p-4 rounded-[20px] card-shadow border border-white/50 group cursor-pointer hover:border-primary-container/30 transition-all">
-<div class="flex justify-between items-start mb-3">
-<span class="bg-secondary-container text-on-secondary-container text-[10px] px-2 py-1 rounded-full font-bold uppercase tracking-tight">Doanh nghiệp</span>
-<span class="text-secondary/40 material-symbols-outlined text-[18px]">drag_indicator</span>
-</div>
-<p class="font-semibold text-on-surface mb-1 group-hover:text-primary transition-colors">Lê Văn Hoàng</p>
-<p class="text-body-sm text-secondary mb-3">Vietcombank</p>
-<div class="flex items-center gap-2 text-[12px] text-on-surface-variant bg-surface-container-low p-2 rounded-lg mb-4">
-<span class="material-symbols-outlined text-[16px]">workspace_premium</span>
-                            Meso Căng bóng VIP
-                        </div>
-<div class="flex justify-between items-center border-t border-outline-variant/20 pt-3">
-<span class="text-primary font-bold">120.000.000 VND</span>
-<div class="w-6 h-6 rounded-full bg-surface-container border-2 border-white flex items-center justify-center text-[10px]">VH</div>
-</div>
-</div>
-</div>
-<!-- Column: Thành công -->
-<div class="w-[320px] bg-[#F8F8F8] rounded-[16px] flex flex-col p-4">
-<div class="flex items-center justify-between mb-4 px-1">
-<h3 class="font-semibold text-secondary flex items-center gap-2">
-                            Thành công
-                            <span class="bg-primary-container/10 text-primary-container text-[11px] px-2 py-0.5 rounded-full font-bold">0</span>
-</h3>
-<span class="material-symbols-outlined text-secondary/40 text-[20px]">more_horiz</span>
-</div>
-<div class="flex-1 border-2 border-dashed border-outline-variant/30 rounded-xl flex items-center justify-center flex-col gap-2 text-secondary/40">
-<span class="material-symbols-outlined text-[32px]">check_circle</span>
-<p class="text-[12px]">Chưa có dữ liệu</p>
-</div>
-</div>
-<!-- Column: Thất bại -->
-<div class="w-[320px] bg-[#F8F8F8] rounded-[16px] flex flex-col p-4">
-<div class="flex items-center justify-between mb-4 px-1">
-<h3 class="font-semibold text-secondary flex items-center gap-2">
-                            Thất bại
-                            <span class="bg-primary-container/10 text-primary-container text-[11px] px-2 py-0.5 rounded-full font-bold">0</span>
-</h3>
-<span class="material-symbols-outlined text-secondary/40 text-[20px]">more_horiz</span>
-</div>
-<div class="flex-1 border-2 border-dashed border-outline-variant/30 rounded-xl flex items-center justify-center flex-col gap-2 text-secondary/40">
-<span class="material-symbols-outlined text-[32px]">cancel</span>
-<p class="text-[12px]">Chưa có dữ liệu</p>
-</div>
-</div>
-</div>
-</div>
-</main>
-```
+            </div>
+        </div>
+        <!-- Kanban Board Area -->
+        <div class="flex-1 px-margin-desktop pb-8 overflow-x-auto kanban-scroll">
+            <div id="kanban-board-container" class="flex gap-gutter h-full min-w-max">
+                <!-- Columns will be dynamically injected here by leads.js -->
+            </div>
+        </div>
+    </main>
+
     <script src="assets/js/layout.js"></script>
     <script src="assets/js/app.js"></script>
+    <script src="assets/js/modules/leads.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            if(typeof injectLayout === 'function') injectLayout('leads');
+        document.addEventListener('DOMContentLoaded', async () => {
+            if(typeof injectLayout === 'function') {
+                await injectLayout('leads');
+                if(typeof LeadModule !== 'undefined') {
+                    await LeadModule.init();
+                }
+            }
         });
     </script>
-</body></html>
+</body>
+</html>

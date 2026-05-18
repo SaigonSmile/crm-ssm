@@ -239,9 +239,15 @@
 
     <script src="assets/js/layout.js"></script>
     <script src="assets/js/app.js"></script>
+    <script src="assets/js/modules/dashboard.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            if(typeof injectLayout === 'function') injectLayout('dashboard');
+        document.addEventListener('DOMContentLoaded', async () => {
+            if(typeof injectLayout === 'function') {
+                await injectLayout('dashboard');
+                if(typeof DashboardModule !== 'undefined') {
+                    await DashboardModule.init();
+                }
+            }
         });
     </script>
 </body></html>

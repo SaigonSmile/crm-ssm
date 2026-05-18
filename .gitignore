@@ -1,0 +1,25 @@
+# Dependency directories
+node_modules/
+
+# Build outputs
+dist/
+
+# Local env files
+.env
+.env.local
+
+# Operating System files
+.DS_Store
+Thumbs.db
+
+# Scratch and extraction files
+*.zip
+*_Clean.txt
+*_Temp/
+read_docx.js
+read_docx.py
+clean_xml.js
+clean_xml2.js
+Supabase/check_schema.cjs
+Supabase/seed_live.js
+Supabase/seed_live.cjs

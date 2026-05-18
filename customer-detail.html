@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Hồ sơ khách hàng | Saigon Smile Medical CRM</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <script src="assets/js/tailwind-config.js"></script>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="bg-background text-on-background font-body-md" data-page="customer-detail">
+    <!-- SideNavBar -->
+    <div id="sidebar-container"></div>
+    <!-- TopAppBar -->
+    <div id="header-container"></div>
+    
+    <!-- Main Content Canvas -->
+    <main class="ml-[260px] pt-16 min-h-screen">
+        <div class="max-w-container-max mx-auto p-margin-desktop space-y-gutter">
+            <!-- Back navigation & Actions -->
+            <div class="flex justify-between items-center">
+                <a href="customers.html" class="flex items-center gap-2 text-secondary hover:text-primary transition-colors font-medium">
+                    <span class="material-symbols-outlined">arrow_back</span>
+                    Quay lại danh sách khách hàng
+                </a>
+                <div class="flex gap-3">
+                    <button id="edit-customer-btn" class="px-5 py-2 border border-outline-variant/60 rounded-xl text-secondary hover:bg-white transition-all card-shadow flex items-center gap-2">
+                        <span class="material-symbols-outlined text-[20px]">edit</span>
+                        <span class="font-button">Chỉnh sửa hồ sơ</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Bento Container: Profile Overview & Basic Info -->
+            <div class="grid grid-cols-12 gap-gutter">
+                <!-- Left column: Profile Snapshot Card (4 cols) -->
+                <div class="col-span-12 lg:col-span-4 flex flex-col gap-gutter">
+                    <div class="glass-card p-8 flex flex-col items-center text-center">
+                        <div class="w-24 h-24 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-3xl mb-4" id="detail-avatar">
+                            --
+                        </div>
+                        <h2 class="font-headline-lg text-on-surface font-extrabold" id="detail-name">Đang tải...</h2>
+                        <span class="px-3 py-1 rounded-full text-xs font-bold bg-primary/10 text-primary mt-2" id="detail-segment">Phân khúc</span>
+                        
+                        <div class="w-full border-t border-outline-variant/30 my-6"></div>
+                        
+                        <div class="w-full space-y-4 text-left">
+                            <div class="flex items-center gap-3">
+                                <span class="material-symbols-outlined text-secondary text-[20px]">phone</span>
+                                <div>
+                                    <p class="text-[10px] text-secondary font-bold uppercase tracking-wider">Số điện thoại</p>
+                                    <p class="font-body-md text-on-surface font-semibold" id="detail-phone">--</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <span class="material-symbols-outlined text-secondary text-[20px]">mail</span>
+                                <div>
+                                    <p class="text-[10px] text-secondary font-bold uppercase tracking-wider">Email</p>
+                                    <p class="font-body-md text-on-surface font-semibold truncate" id="detail-email">--</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <span class="material-symbols-outlined text-secondary text-[20px]">location_on</span>
+                                <div>
+                                    <p class="text-[10px] text-secondary font-bold uppercase tracking-wider">Địa chỉ</p>
+                                    <p class="font-body-md text-on-surface font-semibold" id="detail-address">--</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right column: Full Details & Tabs (8 cols) -->
+                <div class="col-span-12 lg:col-span-8 flex flex-col gap-gutter">
+                    <!-- Tab Panel headers -->
+                    <div class="glass-card p-2 flex gap-2 w-fit">
+                        <button id="tab-btn-opportunities" class="px-5 py-2.5 bg-[#EC7700] text-white rounded-lg font-button shadow-sm transition-all text-sm">Cơ hội bán hàng</button>
+                        <button id="tab-btn-payments" class="px-5 py-2.5 text-secondary hover:bg-subtle-grey rounded-lg font-button transition-all text-sm">Thanh toán</button>
+                        <button id="tab-btn-tasks" class="px-5 py-2.5 text-secondary hover:bg-subtle-grey rounded-lg font-button transition-all text-sm">Lịch hẹn & Nhiệm vụ</button>
+                    </div>
+
+                    <!-- TAB 1: Opportunities List -->
+                    <div id="tab-content-opportunities" class="glass-card p-8 space-y-6">
+                        <div class="flex justify-between items-center">
+                            <h3 class="font-headline-md text-on-surface font-bold">Cơ hội & Gói dịch vụ</h3>
+                            <button id="add-detail-opp-btn" class="px-4 py-2 bg-primary-container text-white rounded-lg text-xs font-bold hover:shadow-lg transition-all flex items-center gap-1.5">
+                                <span class="material-symbols-outlined text-[16px]">add</span>
+                                Thêm cơ hội mới
+                            </button>
+                        </div>
+                        <div class="overflow-x-auto rounded-xl border border-outline-variant/30">
+                            <table class="w-full text-left">
+                                <thead class="bg-subtle-grey">
+                                    <tr>
+                                        <th class="px-6 py-4 font-label-md text-secondary uppercase text-xs">Cơ hội</th>
+                                        <th class="px-6 py-4 font-label-md text-secondary uppercase text-xs">Giá trị dự kiến</th>
+                                        <th class="px-6 py-4 font-label-md text-secondary uppercase text-xs">Trạng thái</th>
+                                        <th class="px-6 py-4 font-label-md text-secondary uppercase text-xs">Ngày tạo</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="detail-opps-body" class="divide-y divide-outline-variant/10 text-sm">
+                                    <!-- Dynamic -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- TAB 2: Payments List (Hidden by default) -->
+                    <div id="tab-content-payments" class="glass-card p-8 space-y-6 hidden">
+                        <div class="flex justify-between items-center">
+                            <h3 class="font-headline-md text-on-surface font-bold">Lịch sử thanh toán</h3>
+                            <button id="add-detail-pay-btn" class="px-4 py-2 bg-primary-container text-white rounded-lg text-xs font-bold hover:shadow-lg transition-all flex items-center gap-1.5">
+                                <span class="material-symbols-outlined text-[16px]">add</span>
+                                Ghi nhận thanh toán
+                            </button>
+                        </div>
+                        <div class="overflow-x-auto rounded-xl border border-outline-variant/30">
+                            <table class="w-full text-left">
+                                <thead class="bg-subtle-grey">
+                                    <tr>
+                                        <th class="px-6 py-4 font-label-md text-secondary uppercase text-xs">Mã GD</th>
+                                        <th class="px-6 py-4 font-label-md text-secondary uppercase text-xs">Số tiền</th>
+                                        <th class="px-6 py-4 font-label-md text-secondary uppercase text-xs">Phương thức</th>
+                                        <th class="px-6 py-4 font-label-md text-secondary uppercase text-xs">Trạng thái</th>
+                                        <th class="px-6 py-4 font-label-md text-secondary uppercase text-xs">Ngày GD</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="detail-payments-body" class="divide-y divide-outline-variant/10 text-sm">
+                                    <!-- Dynamic -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- TAB 3: Tasks List (Hidden by default) -->
+                    <div id="tab-content-tasks" class="glass-card p-8 space-y-6 hidden">
+                        <div class="flex justify-between items-center">
+                            <h3 class="font-headline-md text-on-surface font-bold">Công việc chăm sóc</h3>
+                            <button id="add-detail-task-btn" class="px-4 py-2 bg-primary-container text-white rounded-lg text-xs font-bold hover:shadow-lg transition-all flex items-center gap-1.5">
+                                <span class="material-symbols-outlined text-[16px]">add</span>
+                                Thêm lịch hẹn / Nhiệm vụ
+                            </button>
+                        </div>
+                        <div class="overflow-x-auto rounded-xl border border-outline-variant/30">
+                            <table class="w-full text-left">
+                                <thead class="bg-subtle-grey">
+                                    <tr>
+                                        <th class="px-6 py-4 font-label-md text-secondary w-12"></th>
+                                        <th class="px-6 py-4 font-label-md text-secondary uppercase text-xs">Nội dung</th>
+                                        <th class="px-6 py-4 font-label-md text-secondary uppercase text-xs">Ưu tiên</th>
+                                        <th class="px-6 py-4 font-label-md text-secondary uppercase text-xs">Hạn hoàn thành</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="detail-tasks-body" class="divide-y divide-outline-variant/10 text-sm">
+                                    <!-- Dynamic -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="assets/js/layout.js"></script>
+    <script src="assets/js/app.js"></script>
+    <script src="assets/js/modules/customer-detail.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            if(typeof injectLayout === 'function') {
+                await injectLayout('customers');
+                if(typeof CustomerDetailModule !== 'undefined') {
+                    await CustomerDetailModule.init();
+                }
+            }
+        });
+    </script>
+</body>
+</html>
