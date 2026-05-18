@@ -1,0 +1,75 @@
+﻿BẢN ĐỊNH HƯỚNG THIẾT KẾ HOÀN CHỈNH (DESIGN BRIEF) - CRM SAIGON SMILE MEDICAL
+1. TỔNG QUAN PHONG CÁCH (DESIGN PHILOSOPHY)
+Thiết kế hướng tới sự sang trọng, hiện đại và tin cậy của một hệ thống Medical Spa cao cấp.
+Tối giản (Minimalism): Loại bỏ các chi tiết thừa, tập trung vào dữ liệu và hành động của người dùng.
+Kính mờ (Glassmorphism): Sử dụng các lớp nền trong suốt nhẹ kết hợp đổ bóng mịn để tạo chiều sâu và cảm giác cao cấp.
+Khoảng trắng (White Space): Tận dụng tối đa để tạo sự thông thoáng, giúp người dùng không bị choáng ngợp bởi dữ liệu.
+2. BẢNG MÀU THƯƠNG HIỆU (COLOR PALETTE)
+Sử dụng bộ nhận diện cốt lõi của Saigon Smile Medical:
+Màu Accent chính (Orange): #EC7700 – Dùng cho các nút hành động chính (CTA), các trạng thái nổi bật và điểm nhấn quan trọng.
+Màu Nền (White): #FFFFFF – Màu chủ đạo cho không gian làm việc, tạo cảm giác sạch sẽ và chuyên nghiệp.
+Màu Chữ &amp; Biểu tượng (Slate Grey): #54595F – Dùng cho toàn bộ văn bản nội dung, tiêu đề và các icon điều hướng để tạo sự tinh tế.
+Hiệu ứng Kính (Glassy Layer): rgba(255, 255, 255, 0.5) kết hợp Backdrop-filter: blur(12px).
+3. PHÔNG CHỮ (TYPOGRAPHY)
+Font chính: Montserrat hoặc Inter.
+Đặc điểm: Sử dụng các độ dày mỏng (Thin/Light) để thể hiện sự hiện đại.
+Tiêu đề: 28px - 32px, Font weight 300 (Light).
+Văn bản chính: 14px - 15px, Font weight 400.
+Khoảng cách dòng: 1.6 để tối ưu khả năng đọc.
+4. CẤU TRÚC BỐ CỤC (LAYOUT STRUCTURE)
+Sidebar (Trái): Rộng 260px, nền trắng tối giản. Logo đặt ở trên cùng. Các mục menu có icon mỏng màu #54595F, chuyển sang màu cam #EC7700 khi active.
+Main Content: Hệ thống lưới (Grid) linh hoạt.
+Trang Tổng quan: Các widget số liệu dạng card kính mờ xếp hàng ngang trên cùng. Biểu đồ đường thanh mảnh chiếm diện tích lớn ở giữa.
+Trang Cơ hội (Kanban): Chia cột theo trạng thái bán hàng. Mỗi cột có tiêu đề mỏng. Các thẻ khách hàng di chuyển mượt mà giữa các cột.
+Trang Công việc: Danh sách dạng dòng tối giản, tập trung vào tiêu đề việc cần làm và thời hạn.
+Trang Danh sách: Bảng dữ liệu không viền, khoảng cách dòng rộng.
+Trang Thanh toán: Hiển thị lịch sử dòng tiền rõ ràng, con số định dạng VND lớn.
+Trang Cài đặt: Phân nhóm các thiết lập theo khối card sạch sẽ.
+5. PHONG CÁCH THÀNH PHẦN (COMPONENT STYLE)
+Card: Bo góc 20px, nền kính mờ nhẹ, bóng đổ cực mịn (Soft blur shadow).
+Button: Bo góc 12px. Nút chính màu Cam rực rỡ chữ trắng. Nút phụ viền mảnh màu xám.
+Input: Chỉ có một đường gạch chân mờ (Underline style) hoặc khung nền xám nhạt không viền.
+Badge: Bo tròn hoàn toàn, màu nhạt của tone cam hoặc xám để phân biệt trạng thái.
+Kanban Card: Thẻ khách hàng tối giản nhất có thể: Tên (Bold nhẹ), Sản phẩm quan tâm, và Giá trị đơn hàng (Màu cam).
+6. DỮ LIỆU MẪU (SAMPLE DATA)
+6.1. 6 Khách hàng tiềm năng (Leads)
+Nguyễn Thị Lan Anh – Tập đoàn Vingroup
+Phân khúc: VIP Diamond
+Sản phẩm: Trẻ hóa da &amp; Yến sào Thượng hạng
+Giá trị dự kiến: 35.000.000 VND
+Lê Văn Hoàng – Ngân hàng Vietcombank
+Phân khúc: Doanh nghiệp
+Sản phẩm: Quà tặng Yến sào cao cấp (SLL)
+Giá trị dự kiến: 120.000.000 VND
+Phạm Thu Trang – FPT Software
+Phân khúc: Tiềm năng cao
+Sản phẩm: Liệu trình Giảm béo chuyên sâu
+Giá trị dự kiến: 22.000.000 VND
+Đặng Minh Hùng – Masan Group
+Phân khúc: Khách mới
+Sản phẩm: Trị nám &amp; Chăm sóc da định kỳ
+Giá trị dự kiến: 15.500.000 VND
+Vũ Kim Chi – Vietnam Airlines
+Phân khúc: VIP Platinum
+Sản phẩm: Làm trắng da &amp; Yến huyết quà tặng
+Giá trị dự kiến: 42.000.000 VND
+Hoàng Quốc Bảo – Tập đoàn Hòa Phát
+Phân khúc: Đối tác
+Sản phẩm: Gói sức khỏe tổng quát &amp; Yến chưng tươi
+Giá trị dự kiến: 28.000.000 VND
+6.2. 5 Công việc (Tasks)
+Gửi báo giá Combo Yến sào "Trân Quý" cho chị Lan Anh.
+Ưu tiên: Cao | Deadline: 15:00 hôm nay.
+Gọi điện xác nhận lịch hẹn tư vấn Giảm béo cho chị Trang.
+Ưu tiên: Trung bình | Deadline: 09:30 ngày mai.
+Soạn hợp đồng cung cấp Yến sào cho đối tác Vietcombank.
+Ưu tiên: Cao | Deadline: 17:00 thứ Sáu.
+Gửi thông tin liệu trình Trị nám mới nhất cho anh Hùng qua Zalo.
+Ưu tiên: Thấp | Deadline: 10:00 ngày mai.
+Kiểm tra phản hồi sau buổi tắm trắng đầu tiên của chị Kim Chi.
+Ưu tiên: Trung bình | Deadline: 14:00 chiều nay.
+6.3. 3 Danh sách khách hàng (Lists)
+Khách hàng Chiến lược 2024: Nhóm các cá nhân và doanh nghiệp có ngân sách lớn.
+Hội viên Thẩm mỹ chuyên biệt: Nhóm khách hàng đang theo các liệu trình máy móc cao tại Spa.
+Khách hàng Thân thiết Yến sào: Nhóm khách hàng mua lẻ hoặc đăng ký gói Yến chưng định kỳ hàng tháng.
+Hình ảnh nhận diện: Logo chính thức được tích hợp tinh tế vào Sidebar và các điểm chạm thương hiệu. logo chuẩn https://saigonsmile.com.vn/wp-content/uploads/2025/07/logo-saigon-smile-medical-spa-1.png.

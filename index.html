@@ -1,0 +1,2612 @@
+<!DOCTYPE html>
+<html lang="vi" class="h-full bg-white">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Hệ thống CRM | Saigon Smile Medical Spa</title>
+    <!-- Tailwind CSS with Forms & Container Queries plugins -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#EC7700",
+                        "primary-hover": "#D46A00",
+                        "primary-container": "rgba(236,119,0,0.06)",
+                        "slate-grey": "#54595F",
+                        "subtle-grey": "#F7F7F7",
+                        "status-success": "#22C55E",
+                        "status-warning": "#F59E0B",
+                        "status-error": "#EF4444",
+                        "status-info": "#3B82F6",
+                        "glass-surface": "rgba(255, 255, 255, 0.5)",
+                        "outline-variant": "rgba(84,89,95,0.08)"
+                    },
+                    borderRadius: {
+                        "card": "20px",
+                        "btn": "12px",
+                        "input": "12px"
+                    },
+                    spacing: {
+                        "sidebar-width": "260px",
+                        "margin-desktop": "32px",
+                        "gutter": "24px"
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FFFFFF;
+            color: #54595F;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(84, 89, 95, 0.08);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-card:hover {
+            box-shadow: 0 12px 36px rgba(0, 0, 0, 0.04);
+            transform: translateY(-2px);
+        }
+        .glass-sidebar {
+            background: #FFFFFF;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-right: 1px solid rgba(84, 89, 95, 0.08);
+        }
+        .glass-header {
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(84, 89, 95, 0.08);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+            transition: all 0.2s ease;
+        }
+        .active-menu-item .material-symbols-outlined {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .input-underline {
+            border: none !important;
+            border-bottom: 1px solid rgba(84, 89, 95, 0.15) !important;
+            background: transparent !important;
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+            box-shadow: none !important;
+            transition: all 0.3s ease !important;
+        }
+        .input-underline:focus {
+            outline: none !important;
+            border-bottom: 2px solid #EC7700 !important;
+            box-shadow: none !important;
+        }
+        /* Custom scrollbars */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(84, 89, 95, 0.15);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(84, 89, 95, 0.3);
+        }
+        /* Hide view elements initially */
+        .crm-view {
+            display: none !important;
+        }
+        .crm-view.active {
+            display: block !important;
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+        #view-login.crm-view.active {
+            display: flex !important;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(6px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .kanban-column {
+            min-height: calc(100vh - 280px);
+            transition: background-color 0.2s ease;
+        }
+        .kanban-column.drag-over {
+            background-color: rgba(236,119,0,0.03);
+            border: 2px dashed rgba(236,119,0,0.2);
+        }
+        .kanban-card {
+            cursor: grab;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .kanban-card:active {
+            cursor: grabbing;
+        }
+        .kanban-card.dragging {
+            opacity: 0.4;
+            transform: scale(0.96);
+        }
+    </style>
+</head>
+<body class="h-full font-sans antialiased overflow-x-hidden bg-[#FAFAFA]">
+
+    <!-- ================= TOAST NOTIFICATION CONTAINER ================= -->
+    <div id="toast-container" class="fixed top-6 right-6 z-[9999] flex flex-col gap-3"></div>
+
+    <!-- ================= VIEW: LOGIN SCREEN (100% Fullscreen) ================= -->
+    <div id="view-login" class="crm-view active h-screen w-full flex overflow-hidden bg-white">
+        <!-- Left Side: Ambient Medical Spa Visual (55%) -->
+        <div class="hidden lg:block lg:w-[55%] relative overflow-hidden h-full">
+            <div class="absolute inset-0 bg-center bg-cover transition-transform duration-10000 hover:scale-105" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC-brfZbu-i4pvU6FzvwU5jCMCLcciC43z4JAiAYeNqxLlgU5znrShV0YANranI1EjLnagp-JJd2CIh5Qrl6D2MOBdz7STaZ2O6ixbenZzOT6arvfa8E_cULpNnS4JjtiRCDCUQ9YNAwIn7-AIE-FaLxGCrKYzhwEwaYIAGjrPKZEyw43bzdkswphVCtBYd9xVo-EAa-7KYLJCJsodZPED17IO_GSI15oAFNzHvX0y5zLohEyaFf8g3b5e-cagwrrnvgp8Qg4zWyg');"></div>
+            <!-- Glassy Overlay (rgba(236,119,0,0.08)) -->
+            <div class="absolute inset-0 bg-gradient-to-tr from-primary/10 to-transparent backdrop-blur-[2px]"></div>
+            <!-- Bottom Left Branding Text -->
+            <div class="absolute bottom-16 left-16 max-w-md z-10 text-white">
+                <img alt="Saigon Smile Medical White Vertical Logo" class="h-20 w-auto object-contain mb-8 drop-shadow-md brightness-0 invert" src="https://saigonsmile.com.vn/wp-content/uploads/2025/07/logo-saigon-smile-medical-spa-1.png"/>
+                <p class="text-white text-2xl font-light leading-relaxed drop-shadow-sm">Nơi hội ngộ của công nghệ y khoa hiện đại và dịch vụ chăm sóc sắc đẹp chuẩn y khoa cao cấp.</p>
+            </div>
+        </div>
+
+        <!-- Right Side: Login Form (45%) -->
+        <div class="w-full lg:w-[45%] flex flex-col justify-center items-center px-8 sm:px-16 md:px-24 bg-white relative">
+            <div class="w-full max-w-[400px] flex flex-col">
+                <!-- Brand Logo (Center) -->
+                <div class="flex justify-center mb-8">
+                    <img alt="Saigon Smile Medical Spa Logo" class="h-20 w-auto object-contain" src="https://saigonsmile.com.vn/wp-content/uploads/2025/07/logo-saigon-smile-medical-spa-1.png"/>
+                </div>
+                <!-- Title Texts -->
+                <div class="text-center mb-8">
+                    <h2 class="text-slate-grey text-3xl font-light tracking-wide">Chào mừng trở lại</h2>
+                    <p class="text-slate-grey/60 text-sm font-normal mt-2">Đăng nhập để quản lý CRM Saigon Smile</p>
+                </div>
+                <!-- Form Form -->
+                <form class="space-y-6" onsubmit="handleLoginSubmit(event)">
+                    <!-- Email input -->
+                    <div class="flex flex-col gap-1.5">
+                        <label class="text-slate-grey/80 text-xs font-semibold uppercase tracking-wider">Email công ty</label>
+                        <input id="login-email" class="input-underline w-full py-2 text-slate-grey text-base placeholder:text-slate-grey/30" placeholder="sales.saigon@saigonsmile.com.vn" type="email" value="sales.saigon@saigonsmile.com.vn" required/>
+                    </div>
+                    <!-- Password input -->
+                    <div class="flex flex-col gap-1.5 relative">
+                        <div class="flex justify-between items-center">
+                            <label class="text-slate-grey/80 text-xs font-semibold uppercase tracking-wider">Mật khẩu</label>
+                            <a class="text-primary text-xs font-medium hover:underline" href="#" onclick="showNotification('Tính năng Đặt lại mật khẩu đang được nâng cấp!', 'info')">Quên mật khẩu?</a>
+                        </div>
+                        <div class="relative flex items-center">
+                            <input id="login-password" class="input-underline w-full py-2 pr-8 text-slate-grey text-base placeholder:text-slate-grey/30" placeholder="••••••••" type="password" value="123456" required/>
+                            <button class="absolute right-0 text-slate-grey/40 hover:text-primary transition-colors focus:outline-none" type="button" onclick="togglePasswordVisibility(this)">
+                                <span class="material-symbols-outlined text-[20px]">visibility</span>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Submit button -->
+                    <button class="w-full bg-primary hover:bg-primary-hover text-white py-3.5 rounded-btn font-semibold tracking-wider transition-all shadow-md hover:shadow-lg active:scale-[0.99] mt-4" type="submit">
+                        ĐĂNG NHẬP HỆ THỐNG
+                    </button>
+                    <!-- Divider OR -->
+                    <div class="relative flex items-center py-2">
+                        <div class="flex-grow border-t border-slate-grey/10"></div>
+                        <span class="flex-shrink mx-4 text-slate-grey/30 text-xs font-semibold uppercase tracking-widest">hoặc</span>
+                        <div class="flex-grow border-t border-slate-grey/10"></div>
+                    </div>
+                    <!-- Google Single Sign-On -->
+                    <button class="w-full flex items-center justify-center gap-3 bg-white border border-slate-grey/15 py-3 rounded-btn hover:bg-subtle-grey transition-all active:scale-[0.99]" type="button" onclick="handleSocialLogin()">
+                        <img alt="Google Icon" class="w-5 h-5" src="https://lh3.googleusercontent.com/aida-public/AB6AXuALV8eeG2oCUlapu7Uo15PWfPDx0z4vsDOvIwM8zw4P-661case2gOwsvsyCNoTRDSFwH-HhwXIjAXKDNFtxgpv4cJRLqSicMJSs7ZS0PqHAfdsS7rCkJ4a7lMite54zWLutCIIzxOSzvSFYjoLxkRPijOcrbhoCU556MrOy18xT_4wBl7lLqXfUJPeLiRvAd7MU6FJe5CEyFb5ZssO7L0FUhKX-ZXqktBid37fRe_CL6V1jA8BnqDtFyTnulYjqYqWn_dD4y8I-Q"/>
+                        <span class="text-slate-grey text-sm font-semibold">Đăng nhập với Google Workspace</span>
+                    </button>
+                </form>
+                <!-- Footer -->
+                <div class="mt-12 text-center">
+                    <p class="text-slate-grey/40 text-xs font-normal">
+                        © 2026 Saigon Smile Medical. All rights reserved.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= MAIN LAYOUT WRAPPER (LOGGED IN STATE) ================= -->
+    <div id="crm-layout" class="hidden h-screen w-full flex overflow-hidden">
+        
+        <!-- ================= PERSISTENT SIDEBAR NAVIGATION ================= -->
+        <aside class="fixed left-0 top-0 h-screen w-[260px] glass-sidebar flex flex-col py-6 z-50">
+            <!-- Logo Header -->
+            <div class="px-6 mb-8 flex justify-center">
+                <img alt="Saigon Smile Medical Logo" class="h-14 w-auto object-contain cursor-pointer" src="https://saigonsmile.com.vn/wp-content/uploads/2025/07/logo-saigon-smile-medical-spa-1.png" onclick="switchTab('dashboard')"/>
+            </div>
+            
+            <!-- Menu Navigation -->
+            <nav class="flex-grow space-y-1.5 flex flex-col px-3">
+                <a id="menu-dashboard" class="flex items-center gap-3.5 px-4 py-3 rounded-btn text-slate-grey hover:bg-subtle-grey/80 transition-all active:scale-[0.98]" href="#" onclick="switchTab('dashboard')">
+                    <span class="material-symbols-outlined">dashboard</span>
+                    <span class="font-normal text-sm">Tổng quan</span>
+                </a>
+                <a id="menu-kanban" class="flex items-center gap-3.5 px-4 py-3 rounded-btn text-slate-grey hover:bg-subtle-grey/80 transition-all active:scale-[0.98]" href="#" onclick="switchTab('kanban')">
+                    <span class="material-symbols-outlined">monetization_on</span>
+                    <span class="font-normal text-sm">Cơ hội bán hàng</span>
+                </a>
+                <a id="menu-tasks" class="flex items-center gap-3.5 px-4 py-3 rounded-btn text-slate-grey hover:bg-subtle-grey/80 transition-all active:scale-[0.98]" href="#" onclick="switchTab('tasks')">
+                    <span class="material-symbols-outlined">assignment</span>
+                    <span class="font-normal text-sm">Công việc</span>
+                </a>
+                <a id="menu-customers" class="flex items-center gap-3.5 px-4 py-3 rounded-btn text-slate-grey hover:bg-subtle-grey/80 transition-all active:scale-[0.98]" href="#" onclick="switchTab('customers')">
+                    <span class="material-symbols-outlined">group</span>
+                    <span class="font-normal text-sm">Danh sách khách hàng</span>
+                </a>
+                <a id="menu-payments" class="flex items-center gap-3.5 px-4 py-3 rounded-btn text-slate-grey hover:bg-subtle-grey/80 transition-all active:scale-[0.98]" href="#" onclick="switchTab('payments')">
+                    <span class="material-symbols-outlined">payments</span>
+                    <span class="font-normal text-sm">Thanh toán</span>
+                </a>
+                <a id="menu-settings" class="flex items-center gap-3.5 px-4 py-3 rounded-btn text-slate-grey hover:bg-subtle-grey/80 transition-all active:scale-[0.98]" href="#" onclick="switchTab('settings')">
+                    <span class="material-symbols-outlined">settings</span>
+                    <span class="font-normal text-sm">Cài đặt</span>
+                </a>
+            </nav>
+
+            <!-- Bottom User Profile Indicator -->
+            <div class="mt-auto px-4">
+                <div class="p-3 bg-subtle-grey rounded-2xl flex items-center justify-between border border-slate-grey/5">
+                    <div class="flex items-center gap-3 min-w-0">
+                        <img id="sidebar-avatar" alt="User Profile Avatar" class="w-10 h-10 rounded-full object-cover border border-primary/20" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBySo8VuNyUNhRqbZCTIAEVEC_FszP2aAkbKadMU7tOROLJHiVn2I7SRN7PuefEtKgf6elsnCmkkY-6E6ZCT-uV41V-y-ZDfihUeoSuv8NpgFFC_OS2PXBsmA4-CjySPLJO7RqccF7jQgqNheavmfIEmHlFvVkKyXq-QDyZlgGjnyfpj88mUbCDeXL-lMr6estcmGHBN-EbQdKNBQPm_6LvbMeTqZFPLACOspoqPhCGpSwAe5uvzTa0BVBVbaa0WQiwzpT-goGMHg"/>
+                        <div class="min-w-0">
+                            <p id="sidebar-name" class="text-xs font-semibold text-slate-grey truncate">Nguyễn Sales</p>
+                            <span class="inline-flex items-center px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-primary/10 text-primary uppercase mt-0.5">Tư vấn viên</span>
+                        </div>
+                    </div>
+                    <button class="text-slate-grey/40 hover:text-status-error p-1 rounded-lg hover:bg-white transition-all focus:outline-none" title="Đăng xuất" onclick="handleLogout()">
+                        <span class="material-symbols-outlined text-[20px]">logout</span>
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- ================= MAIN CANVAS AREA ================= -->
+        <div class="flex-grow pl-[260px] flex flex-col h-full bg-[#FCFCFC] relative overflow-hidden">
+            
+            <!-- Global Top Header Bar -->
+            <header class="h-16 glass-header flex justify-between items-center px-8 z-40">
+                <!-- Search bar -->
+                <div class="flex items-center bg-subtle-grey px-4 py-1.5 rounded-full w-96 border border-slate-grey/5 focus-within:border-primary/30 transition-all">
+                    <span class="material-symbols-outlined text-slate-grey/40 mr-2 text-[20px]">search</span>
+                    <input id="global-search" class="bg-transparent border-none focus:ring-0 text-xs w-full text-slate-grey placeholder:text-slate-grey/30 py-0.5" placeholder="Tìm kiếm nhanh cơ hội, khách hàng, dịch vụ..." type="text" oninput="handleGlobalSearch(this.value)"/>
+                </div>
+                
+                <!-- Notification & Help actions -->
+                <div class="flex items-center gap-6">
+                    <div class="relative">
+                        <button class="text-slate-grey/60 hover:text-primary transition-all p-1.5 rounded-full hover:bg-subtle-grey focus:outline-none relative" onclick="showNotification('Hôm nay bạn có 3 lịch hẹn tư vấn và 1 công việc quá hạn cần xử lý ngay!', 'warning')">
+                            <span class="material-symbols-outlined text-[22px]">notifications</span>
+                            <span class="absolute top-1 right-1 w-2.5 h-2.5 bg-status-error border-2 border-white rounded-full"></span>
+                        </button>
+                    </div>
+                    
+                    <div class="h-6 w-px bg-slate-grey/10"></div>
+                    
+                    <div class="flex items-center gap-3">
+                        <div class="text-right">
+                            <p class="text-xs font-semibold text-slate-grey">Chi nhánh Trung Hòa</p>
+                            <p class="text-[10px] text-slate-grey/40">Saigon Smile Spa Hà Nội</p>
+                        </div>
+                        <img id="header-avatar" alt="User Profile Small" class="w-9 h-9 rounded-full object-cover border border-slate-grey/10" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBySo8VuNyUNhRqbZCTIAEVEC_FszP2aAkbKadMU7tOROLJHiVn2I7SRN7PuefEtKgf6elsnCmkkY-6E6ZCT-uV41V-y-ZDfihUeoSuv8NpgFFC_OS2PXBsmA4-CjySPLJO7RqccF7jQgqNheavmfIEmHlFvVkKyXq-QDyZlgGjnyfpj88mUbCDeXL-lMr6estcmGHBN-EbQdKNBQPm_6LvbMeTqZFPLACOspoqPhCGpSwAe5uvzTa0BVBVbaa0WQiwzpT-goGMHg"/>
+                    </div>
+                </div>
+            </header>
+
+            <!-- ================= VIEW PANEL SCROLL CONTENT ================= -->
+            <div class="flex-1 overflow-y-auto p-8 relative">
+                
+                <!-- ================= VIEW: TỔNG QUAN (DASHBOARD) ================= -->
+                <div id="view-dashboard" class="crm-view space-y-8">
+                    <!-- Screen Header -->
+                    <div class="flex justify-between items-end">
+                        <div>
+                            <p class="text-xs font-semibold text-primary uppercase tracking-widest mb-1.5">Trang chủ</p>
+                            <h2 class="text-2xl font-light text-slate-grey tracking-wide">Tổng quan kết quả kinh doanh</h2>
+                        </div>
+                        <div class="bg-white border border-slate-grey/10 rounded-xl px-4 py-2 text-xs text-slate-grey shadow-sm">
+                            <span class="font-medium text-slate-grey/50">Thời gian thực tế:</span> <span class="font-semibold" id="current-date-span">18/05/2026</span>
+                        </div>
+                    </div>
+
+                    <!-- Bento Bento Grid: 4 Metric Cards -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <!-- Leads card -->
+                        <div class="glass-card p-6 rounded-card relative overflow-hidden group">
+                            <div class="absolute -right-4 -top-4 w-20 h-20 bg-status-info/5 rounded-full group-hover:scale-150 transition-all duration-500"></div>
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="material-symbols-outlined text-status-info text-[26px]">groups</span>
+                                <span class="text-status-success text-xs font-bold bg-status-success/10 px-2 py-0.5 rounded-full flex items-center gap-1">+18% <span class="material-symbols-outlined text-[10px]">trending_up</span></span>
+                            </div>
+                            <p class="text-xs font-semibold text-slate-grey/50 uppercase tracking-wider mb-1">Leads mới hôm nay</p>
+                            <h3 id="stat-new-leads" class="text-3xl font-light text-slate-grey">12</h3>
+                        </div>
+                        <!-- Appointment card -->
+                        <div class="glass-card p-6 rounded-card relative overflow-hidden group">
+                            <div class="absolute -right-4 -top-4 w-20 h-20 bg-status-success/5 rounded-full group-hover:scale-150 transition-all duration-500"></div>
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="material-symbols-outlined text-status-success text-[26px]">calendar_month</span>
+                                <span class="text-status-success text-xs font-bold bg-status-success/10 px-2 py-0.5 rounded-full flex items-center gap-1">+5% <span class="material-symbols-outlined text-[10px]">trending_up</span></span>
+                            </div>
+                            <p class="text-xs font-semibold text-slate-grey/50 uppercase tracking-wider mb-1">Lịch hẹn đã xác nhận</p>
+                            <h3 id="stat-confirmed-appts" class="text-3xl font-light text-slate-grey">8</h3>
+                        </div>
+                        <!-- Revenue card -->
+                        <div class="glass-card p-6 rounded-card relative overflow-hidden group border-l-2 border-l-primary">
+                            <div class="absolute -right-4 -top-4 w-20 h-20 bg-primary/5 rounded-full group-hover:scale-150 transition-all duration-500"></div>
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="material-symbols-outlined text-primary text-[26px]">payments</span>
+                                <span class="text-primary text-xs font-bold bg-primary/10 px-2 py-0.5 rounded-full">Dự kiến</span>
+                            </div>
+                            <p class="text-xs font-semibold text-slate-grey/50 uppercase tracking-wider mb-1">Doanh thu dự kiến</p>
+                            <h3 id="stat-expected-value" class="text-3xl font-light text-primary">262.500.000 ₫</h3>
+                        </div>
+                        <!-- Overdue task card -->
+                        <div class="glass-card p-6 rounded-card relative overflow-hidden group">
+                            <div class="absolute -right-4 -top-4 w-20 h-20 bg-status-error/5 rounded-full group-hover:scale-150 transition-all duration-500"></div>
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="material-symbols-outlined text-status-error text-[26px]">warning</span>
+                                <span id="stat-overdue-badge" class="text-status-error text-xs font-bold bg-status-error/10 px-2 py-0.5 rounded-full">Quá hạn</span>
+                            </div>
+                            <p class="text-xs font-semibold text-slate-grey/50 uppercase tracking-wider mb-1">Công việc quá hạn</p>
+                            <h3 id="stat-overdue-tasks" class="text-3xl font-light text-status-error">3</h3>
+                        </div>
+                    </div>
+
+                    <!-- Two columns: Charts section -->
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <!-- Left Chart (65% width) - Weekly growth -->
+                        <div class="glass-card p-6 rounded-card lg:col-span-2">
+                            <div class="flex justify-between items-center mb-6">
+                                <div>
+                                    <h4 class="text-base font-semibold text-slate-grey">Xu hướng Leads theo tuần</h4>
+                                    <p class="text-xs text-slate-grey/50">Thống kê 7 ngày gần nhất</p>
+                                </div>
+                                <span class="inline-flex items-center gap-1.5 text-xs text-primary font-medium bg-primary/5 px-2.5 py-1 rounded-full"><span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>Theo ngày</span>
+                            </div>
+                            <!-- Sleek Dynamic SVG line chart -->
+                            <div class="relative h-64 w-full">
+                                <svg class="w-full h-full" viewBox="0 0 600 240" preserveAspectRatio="none">
+                                    <defs>
+                                        <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
+                                            <stop offset="0%" stop-color="#EC7700" stop-opacity="0.25"/>
+                                            <stop offset="100%" stop-color="#EC7700" stop-opacity="0.00"/>
+                                        </linearGradient>
+                                    </defs>
+                                    <!-- Grid lines -->
+                                    <line x1="0" y1="40" x2="600" y2="40" stroke="#f0f0f0" stroke-width="1" stroke-dasharray="4,4"/>
+                                    <line x1="0" y1="100" x2="600" y2="100" stroke="#f0f0f0" stroke-width="1" stroke-dasharray="4,4"/>
+                                    <line x1="0" y1="160" x2="600" y2="160" stroke="#f0f0f0" stroke-width="1" stroke-dasharray="4,4"/>
+                                    <line x1="0" y1="210" x2="600" y2="210" stroke="#e6e6e6" stroke-width="1.5"/>
+                                    
+                                    <!-- Filled path -->
+                                    <path d="M 10 210 Q 98 120 186 160 T 362 60 T 538 100 T 590 30 L 590 210 Z" fill="url(#chartGrad)"/>
+                                    
+                                    <!-- Line path -->
+                                    <path d="M 10 210 Q 98 120 186 160 T 362 60 T 538 100 T 590 30" fill="none" stroke="#EC7700" stroke-width="3" stroke-linecap="round"/>
+                                    
+                                    <!-- Chart dots -->
+                                    <circle cx="10" cy="210" r="4" fill="#FFFFFF" stroke="#EC7700" stroke-width="2"/>
+                                    <circle cx="98" cy="120" r="4" fill="#FFFFFF" stroke="#EC7700" stroke-width="2"/>
+                                    <circle cx="186" cy="160" r="4" fill="#FFFFFF" stroke="#EC7700" stroke-width="2"/>
+                                    <circle cx="274" cy="110" r="4" fill="#FFFFFF" stroke="#EC7700" stroke-width="2"/>
+                                    <circle cx="362" cy="60" r="4" fill="#FFFFFF" stroke="#EC7700" stroke-width="2"/>
+                                    <circle cx="450" cy="120" r="4" fill="#FFFFFF" stroke="#EC7700" stroke-width="2"/>
+                                    <circle cx="538" cy="100" r="4" fill="#FFFFFF" stroke="#EC7700" stroke-width="2"/>
+                                    <circle cx="590" cy="30" r="5" fill="#EC7700" stroke="#FFFFFF" stroke-width="1.5"/>
+                                </svg>
+                                <!-- Chart Labels -->
+                                <div class="absolute bottom-1 w-full flex justify-between text-[9px] text-slate-grey/40 px-2 font-medium">
+                                    <span>T2</span><span>T3</span><span>T4</span><span>T5</span><span>T6</span><span>T7</span><span>CN</span><span>Hôm nay</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Chart (35% width) - Service shares -->
+                        <div class="glass-card p-6 rounded-card">
+                            <h4 class="text-base font-semibold text-slate-grey mb-1">Phân bổ dịch vụ quan tâm</h4>
+                            <p class="text-xs text-slate-grey/50 mb-6">Theo tỷ lệ Leads lựa chọn</p>
+                            <div class="flex flex-col items-center">
+                                <!-- Doughnut SVG Chart -->
+                                <div class="relative w-40 h-40 flex items-center justify-center">
+                                    <svg class="w-full h-full -rotate-90" viewBox="0 0 36 36">
+                                        <!-- Giảm béo 30% (#EC7700) -->
+                                        <circle cx="18" cy="18" r="15.9" fill="none" stroke="#EC7700" stroke-width="3" stroke-dasharray="30 70" stroke-dashoffset="0"/>
+                                        <!-- Trẻ hóa da 25% (#3B82F6) -->
+                                        <circle cx="18" cy="18" r="15.9" fill="none" stroke="#3B82F6" stroke-width="3" stroke-dasharray="25 75" stroke-dashoffset="-30"/>
+                                        <!-- Làm trắng 20% (#22C55E) -->
+                                        <circle cx="18" cy="18" r="15.9" fill="none" stroke="#22C55E" stroke-width="3" stroke-dasharray="20 80" stroke-dashoffset="-55"/>
+                                        <!-- Trị nám 15% (#F59E0B) -->
+                                        <circle cx="18" cy="18" r="15.9" fill="none" stroke="#F59E0B" stroke-width="3" stroke-dasharray="15 85" stroke-dashoffset="-75"/>
+                                        <!-- Chăm sóc da 10% (#A855F7) -->
+                                        <circle cx="18" cy="18" r="15.9" fill="none" stroke="#A855F7" stroke-width="3" stroke-dasharray="10 90" stroke-dashoffset="-90"/>
+                                    </svg>
+                                    <div class="absolute text-center">
+                                        <span class="text-xs font-semibold text-slate-grey/40">Dịch vụ</span>
+                                        <p class="text-base font-bold text-slate-grey">Top 5</p>
+                                    </div>
+                                </div>
+                                <!-- Legend Grid -->
+                                <div class="grid grid-cols-2 gap-3 w-full mt-6 text-xs font-medium text-slate-grey/70">
+                                    <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded bg-primary"></span><span>Giảm béo (30%)</span></div>
+                                    <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded bg-status-info"></span><span>Trẻ hóa da (25%)</span></div>
+                                    <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded bg-status-success"></span><span>Làm trắng (20%)</span></div>
+                                    <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded bg-status-warning"></span><span>Trị nám (15%)</span></div>
+                                    <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded bg-purple-500"></span><span>Chăm sóc da (10%)</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Lower Section: Urgent Actions -->
+                    <div class="glass-card p-6 rounded-card">
+                        <div class="flex justify-between items-center mb-6">
+                            <h4 class="text-base font-semibold text-slate-grey flex items-center gap-2">⚡ Việc khẩn cấp cần xử lý ngay <span class="bg-status-error/15 text-status-error text-[10px] px-2 py-0.5 rounded-full font-bold">Hot</span></h4>
+                            <a class="text-xs font-semibold text-primary hover:underline" href="#" onclick="switchTab('tasks')">Xem toàn bộ công việc →</a>
+                        </div>
+                        <div class="divide-y divide-slate-grey/5" id="dashboard-urgent-tasks">
+                            <!-- Injected dynamically in script -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ================= VIEW: CƠ HỘI BÁN HÀNG (KANBAN) ================= -->
+                <div id="view-kanban" class="crm-view space-y-8">
+                    <!-- Screen Header -->
+                    <div class="flex justify-between items-end">
+                        <div>
+                            <p class="text-xs font-semibold text-primary uppercase tracking-widest mb-1.5">Bán hàng</p>
+                            <h2 class="text-2xl font-light text-slate-grey tracking-wide">Quản lý cơ hội bán hàng (Kanban)</h2>
+                        </div>
+                        <div class="flex gap-3">
+                            <button class="flex items-center gap-2 px-4 py-2 border border-slate-grey/15 rounded-btn hover:bg-subtle-grey text-slate-grey transition-all" onclick="showNotification('Bộ lọc đang hoạt động chuẩn!', 'success')">
+                                <span class="material-symbols-outlined text-[18px]">filter_alt</span>
+                                <span class="font-semibold text-xs">Lọc danh mục</span>
+                            </button>
+                            <button class="flex items-center gap-1.5 px-5 py-2.5 bg-primary hover:bg-primary-hover text-white rounded-btn font-semibold text-xs shadow-md shadow-primary/20 active:scale-[0.98] transition-all" onclick="openAddLeadPanel()">
+                                <span class="material-symbols-outlined text-[18px]">add</span>
+                                THÊM CƠ HỘI MỚI
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Pipeline Kanban scrollable canvas -->
+                    <div class="overflow-x-auto pb-4 -mx-8 px-8">
+                        <div class="flex gap-5 min-w-max" id="kanban-pipeline-container">
+                            <!-- Injected dynamically in script: 7 Columns -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ================= VIEW: CHI TIẾT KHÁCH HÀNG (LEAD DETAIL) ================= -->
+                <div id="view-lead-detail" class="crm-view space-y-8">
+                    <!-- Breadcrumbs & Nav back -->
+                    <div class="flex items-center gap-3">
+                        <button class="flex items-center justify-center w-8 h-8 rounded-full border border-slate-grey/15 hover:bg-subtle-grey text-slate-grey transition-all focus:outline-none" onclick="goBackToPreviousTab()">
+                            <span class="material-symbols-outlined text-[18px]">arrow_back</span>
+                        </button>
+                        <nav class="flex items-center gap-2 text-xs font-semibold text-slate-grey/50">
+                            <span class="cursor-pointer hover:text-primary" onclick="switchTab('kanban')">Cơ hội bán hàng</span>
+                            <span class="material-symbols-outlined text-[14px]">chevron_right</span>
+                            <span class="text-slate-grey">Hồ sơ khách hàng</span>
+                        </nav>
+                    </div>
+
+                    <!-- Main grid (2 columns) -->
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                        <!-- Left Column (35% width) - Profile card -->
+                        <div class="lg:col-span-4 glass-card p-6 rounded-card flex flex-col items-center">
+                            <!-- Avatar big -->
+                            <div class="w-24 h-24 rounded-full bg-primary/10 border-2 border-primary text-primary font-bold text-3xl flex items-center justify-center shadow-inner mb-4" id="detail-avatar-container">
+                                LA
+                            </div>
+                            <h3 id="detail-name" class="text-xl font-bold text-slate-grey mb-1">Nguyễn Thị Lan Anh</h3>
+                            <p id="detail-company" class="text-xs text-slate-grey/60 mb-3">Tập đoàn Vingroup</p>
+                            <span id="detail-segment-badge" class="px-3 py-1 rounded-full text-[10px] font-bold bg-primary/10 text-primary uppercase tracking-wider mb-6">VIP Diamond</span>
+                            
+                            <!-- Fields contact -->
+                            <div class="w-full space-y-4 border-t border-slate-grey/10 pt-6 text-xs text-slate-grey font-medium">
+                                <div class="flex justify-between">
+                                    <span class="text-slate-grey/40 uppercase">Số điện thoại</span>
+                                    <span id="detail-phone" class="font-semibold text-slate-grey/90">0912.345.678</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-slate-grey/40 uppercase">Email cá nhân</span>
+                                    <span id="detail-email" class="font-semibold text-slate-grey/90">lananh@vingroup.com</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-slate-grey/40 uppercase">Khu vực sinh sống</span>
+                                    <span id="detail-address" class="font-semibold text-slate-grey/90">Hà Nội</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-slate-grey/40 uppercase">Giá trị dự kiến</span>
+                                    <span id="detail-value" class="font-bold text-sm text-primary">35.000.000 ₫</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-slate-grey/40 uppercase">Nhân viên phụ trách</span>
+                                    <div class="flex items-center gap-1.5 font-semibold text-slate-grey/90">
+                                        <div class="w-5 h-5 rounded-full bg-slate-grey/20 flex items-center justify-center text-[9px] font-bold">AM</div>
+                                        <span>Anh Minh Sales</span>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col gap-2 pt-2 border-t border-slate-grey/5">
+                                    <span class="text-slate-grey/40 uppercase">Sản phẩm quan tâm</span>
+                                    <div id="detail-interests-tags" class="flex flex-wrap gap-1.5">
+                                        <!-- Injected tags -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Action buttons -->
+                            <div class="w-full grid grid-cols-2 gap-3 mt-8">
+                                <button class="py-2.5 border border-primary/40 hover:bg-primary/5 text-primary text-xs font-bold rounded-btn transition-all active:scale-[0.98]" onclick="showNotification('Tính năng Chỉnh sửa thông tin nhanh sẽ có ở bản nâng cấp!', 'info')">CHỈNH SỬA</button>
+                                <div class="relative w-full">
+                                    <button class="w-full py-2.5 bg-primary hover:bg-primary-hover text-white text-xs font-bold rounded-btn transition-all active:scale-[0.98]" onclick="toggleStageDropdown(event)">ĐỔI TRẠNG THÁI</button>
+                                    <!-- Dropdown absolute stage options -->
+                                    <div id="stage-dropdown-menu" class="hidden absolute right-0 bottom-12 w-48 bg-white border border-slate-grey/15 rounded-xl shadow-lg z-50 overflow-hidden py-1">
+                                        <!-- Injected in script -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Column (65% width) - Interactive Tabs -->
+                        <div class="lg:col-span-8 space-y-6">
+                            <!-- Tabs navigation header -->
+                            <div class="glass-card rounded-[16px] p-2 flex gap-1">
+                                <button id="tab-btn-notes" class="flex-1 py-3 text-xs font-bold rounded-xl text-primary bg-primary-container/60 focus:outline-none transition-all" onclick="switchDetailTab('notes')">💬 Ghi chú</button>
+                                <button id="tab-btn-tasks" class="flex-1 py-3 text-xs font-semibold rounded-xl text-slate-grey/60 hover:text-slate-grey focus:outline-none transition-all" onclick="switchDetailTab('tasks')">✅ Công việc liên quan</button>
+                                <button id="tab-btn-history" class="flex-1 py-3 text-xs font-semibold rounded-xl text-slate-grey/60 hover:text-slate-grey focus:outline-none transition-all" onclick="switchDetailTab('history')">📜 Lịch sử hoạt động</button>
+                            </div>
+
+                            <!-- TAB PANEL: Notes (Ghi chú) -->
+                            <div id="tab-panel-notes" class="detail-tab-panel space-y-6">
+                                <!-- Note Input card -->
+                                <div class="glass-card p-6 rounded-card space-y-4">
+                                    <h4 class="text-sm font-semibold text-slate-grey">Thêm ghi chú mới cho khách hàng</h4>
+                                    <textarea id="note-input-text" class="w-full text-xs border border-slate-grey/10 rounded-xl p-3 focus:ring-1 focus:ring-primary focus:border-primary placeholder:text-slate-grey/30 bg-[#FAFAFA]" placeholder="Nhập tóm tắt ý kiến khách hàng hoặc lộ trình trao đổi..." rows="3"></textarea>
+                                    <div class="flex justify-end">
+                                        <button class="px-5 py-2 bg-primary hover:bg-primary-hover text-white text-xs font-bold rounded-btn shadow-md active:scale-95 transition-all" onclick="addLeadNoteSubmit()">LƯU GHI CHÚ</button>
+                                    </div>
+                                </div>
+
+                                <!-- Note Timeline display list -->
+                                <div class="glass-card p-6 rounded-card space-y-6">
+                                    <h4 class="text-sm font-semibold text-slate-grey">Dòng thời gian ghi chú</h4>
+                                    <div class="relative border-l border-slate-grey/10 pl-6 ml-3 space-y-6" id="lead-notes-timeline">
+                                        <!-- Timeline elements injected -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- TAB PANEL: Tasks (Công việc liên quan) -->
+                            <div id="tab-panel-tasks" class="detail-tab-panel hidden space-y-6">
+                                <div class="glass-card p-6 rounded-card space-y-4">
+                                    <div class="flex justify-between items-center mb-2">
+                                        <h4 class="text-sm font-semibold text-slate-grey">Công việc cần thực hiện cho khách hàng</h4>
+                                        <button class="flex items-center gap-1 text-xs text-primary font-bold hover:underline focus:outline-none" onclick="showNotification('Hãy mở Slide-over hoặc Thêm mới ở màn hình Công việc lớn!', 'info')">
+                                            <span class="material-symbols-outlined text-[14px]">add</span> THÊM CÔNG VIỆC
+                                        </button>
+                                    </div>
+                                    <div class="divide-y divide-slate-grey/5 space-y-1" id="lead-tasks-list">
+                                        <!-- Injected Tasks -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- TAB PANEL: History (Lịch sử hoạt động) -->
+                            <div id="tab-panel-history" class="detail-tab-panel hidden space-y-6">
+                                <div class="glass-card p-6 rounded-card space-y-6">
+                                    <h4 class="text-sm font-semibold text-slate-grey">Nhật ký hoạt động hệ thống</h4>
+                                    <div class="relative border-l border-slate-grey/10 pl-6 ml-3 space-y-6" id="lead-history-timeline">
+                                        <!-- Injected history items -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ================= VIEW: CÔNG VIỆC (TASKS) ================= -->
+                <div id="view-tasks" class="crm-view space-y-8">
+                    <!-- Screen Header -->
+                    <div class="flex justify-between items-end">
+                        <div>
+                            <p class="text-xs font-semibold text-primary uppercase tracking-widest mb-1.5">Điều phối</p>
+                            <h2 class="text-2xl font-light text-slate-grey tracking-wide">Quản lý công việc và nhiệm vụ (Tasks)</h2>
+                        </div>
+                        <button class="flex items-center gap-1.5 px-5 py-2.5 bg-primary hover:bg-primary-hover text-white rounded-btn font-semibold text-xs shadow-md shadow-primary/20 active:scale-[0.98] transition-all" onclick="showNotification('Vui lòng thêm công việc qua trang hồ sơ khách hàng để liên kết chuẩn xác!', 'info')">
+                            <span class="material-symbols-outlined text-[18px]">add_task</span>
+                            THÊM NHIỆM VỤ MỚI
+                        </button>
+                    </div>
+
+                    <!-- Filter Pill Bar -->
+                    <div class="flex flex-wrap gap-2.5">
+                        <button id="task-filter-all" class="px-4 py-2 text-xs font-semibold rounded-full bg-primary text-white transition-all shadow-sm focus:outline-none" onclick="filterTasks('all')">Tất cả</button>
+                        <button id="task-filter-today" class="px-4 py-2 text-xs font-semibold rounded-full bg-white text-slate-grey/60 border border-slate-grey/10 hover:text-slate-grey transition-all focus:outline-none" onclick="filterTasks('today')">Hôm nay</button>
+                        <button id="task-filter-overdue" class="px-4 py-2 text-xs font-semibold rounded-full bg-white text-slate-grey/60 border border-slate-grey/10 hover:text-slate-grey transition-all focus:outline-none" onclick="filterTasks('overdue')">Quá hạn</button>
+                        <button id="task-filter-completed" class="px-4 py-2 text-xs font-semibold rounded-full bg-white text-slate-grey/60 border border-slate-grey/10 hover:text-slate-grey transition-all focus:outline-none" onclick="filterTasks('completed')">Đã hoàn thành</button>
+                    </div>
+
+                    <!-- Tasks Table List Card -->
+                    <div class="glass-card rounded-card overflow-hidden">
+                        <!-- Table header grid -->
+                        <div class="grid grid-cols-12 gap-4 px-6 py-4 bg-subtle-grey border-b border-slate-grey/5 text-slate-grey/50 text-[10px] font-semibold uppercase tracking-wider">
+                            <div class="col-span-1 flex justify-center">Trạng thái</div>
+                            <div class="col-span-5">Nhiệm vụ cần thực hiện</div>
+                            <div class="col-span-2">Khách hàng liên quan</div>
+                            <div class="col-span-2">Độ ưu tiên</div>
+                            <div class="col-span-2">Hạn hoàn thành</div>
+                        </div>
+                        <!-- Table body -->
+                        <div class="divide-y divide-slate-grey/5" id="tasks-table-list">
+                            <!-- Injected dynamically in script -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ================= VIEW: DANH SÁCH KHÁCH HÀNG (CUSTOMERS) ================= -->
+                <div id="view-customers" class="crm-view space-y-8">
+                    <!-- Screen Header -->
+                    <div class="flex justify-between items-end">
+                        <div>
+                            <p class="text-xs font-semibold text-primary uppercase tracking-widest mb-1.5">Cơ sở dữ liệu</p>
+                            <h2 class="text-2xl font-light text-slate-grey tracking-wide">Danh sách khách hàng tập trung</h2>
+                        </div>
+                        <div class="flex gap-3">
+                            <button class="flex items-center gap-1.5 px-4 py-2 text-slate-grey/60 border border-slate-grey/15 rounded-btn hover:bg-subtle-grey transition-all text-xs font-semibold focus:outline-none shadow-sm" onclick="handleImportCSV()">
+                                <span class="material-symbols-outlined text-[18px]">download</span>
+                                Nhập CSV
+                            </button>
+                            <button class="flex items-center gap-1.5 px-4 py-2 text-slate-grey/60 border border-slate-grey/15 rounded-btn hover:bg-subtle-grey transition-all text-xs font-semibold focus:outline-none shadow-sm" onclick="handleExportCSV()">
+                                <span class="material-symbols-outlined text-[18px]">upload</span>
+                                Xuất CSV
+                            </button>
+                            <button class="flex items-center gap-1.5 px-5 py-2.5 bg-primary hover:bg-primary-hover text-white rounded-btn font-semibold text-xs shadow-md shadow-primary/20 active:scale-[0.98] transition-all" onclick="openAddLeadPanel()">
+                                <span class="material-symbols-outlined text-[18px]">person_add</span>
+                                THÊM KHÁCH HÀNG
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Integrated Search & Filter panel -->
+                    <div class="glass-card p-5 rounded-card flex flex-wrap items-center gap-4">
+                        <!-- Customer search input -->
+                        <div class="flex-1 min-w-[300px] flex items-center bg-subtle-grey px-4 py-2.5 rounded-xl border border-slate-grey/5">
+                            <span class="material-symbols-outlined text-slate-grey/40 mr-3 text-[18px]">person_search</span>
+                            <input id="customer-search-input" class="bg-transparent border-none focus:ring-0 text-xs w-full text-slate-grey placeholder:text-slate-grey/30 py-0.5" placeholder="Tìm kiếm nhanh khách hàng theo tên, số điện thoại, công ty..." type="text" oninput="handleCustomerSearch(this.value)"/>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <select id="customer-segment-select" class="bg-subtle-grey border-none text-xs rounded-xl px-4 py-2.5 focus:ring-1 focus:ring-primary min-w-[140px] text-slate-grey cursor-pointer" onchange="handleCustomerFilters()">
+                                <option value="all">Phân khúc: Tất cả</option>
+                                <option value="VIP Diamond">VIP Diamond</option>
+                                <option value="VIP Platinum">VIP Platinum</option>
+                                <option value="Doanh nghiệp">Doanh nghiệp</option>
+                                <option value="Tiềm năng cao">Tiềm năng cao</option>
+                                <option value="Khách mới">Khách mới</option>
+                                <option value="Đối tác">Đối tác</option>
+                            </select>
+                            <select id="customer-interest-select" class="bg-subtle-grey border-none text-xs rounded-xl px-4 py-2.5 focus:ring-1 focus:ring-primary min-w-[140px] text-slate-grey cursor-pointer" onchange="handleCustomerFilters()">
+                                <option value="all">Sản phẩm: Tất cả</option>
+                                <option value="Trẻ hóa da">Trẻ hóa da</option>
+                                <option value="Giảm béo">Giảm béo</option>
+                                <option value="Làm trắng da">Làm trắng da</option>
+                                <option value="Trị nám">Trị nám</option>
+                                <option value="Chăm sóc da">Chăm sóc da</option>
+                                <option value="Nâng cơ Hifu">Nâng cơ Hifu</option>
+                            </select>
+                            <button class="p-2 text-slate-grey/40 hover:text-primary transition-all focus:outline-none" onclick="resetCustomerFilters()" title="Đặt lại bộ lọc">
+                                <span class="material-symbols-outlined">restart_alt</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Customer Database Table -->
+                    <div class="glass-card rounded-card overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="bg-subtle-grey border-b border-slate-grey/5 text-slate-grey/50 text-[10px] font-semibold uppercase tracking-wider">
+                                        <th class="px-6 py-4 w-12"><input class="rounded border-slate-grey/15 text-primary focus:ring-primary" type="checkbox"/></th>
+                                        <th class="px-6 py-4">Tên khách hàng</th>
+                                        <th class="px-6 py-4">Công ty</th>
+                                        <th class="px-6 py-4">Phân khúc</th>
+                                        <th class="px-6 py-4">Sản phẩm quan tâm</th>
+                                        <th class="px-6 py-4">Nhân viên phụ trách</th>
+                                        <th class="px-6 py-4">Hành động</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-grey/5" id="customers-table-body">
+                                    <!-- Injected dynamically in script -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- Table footer Pagination -->
+                        <div class="px-6 py-4 flex justify-between items-center border-t border-slate-grey/5 bg-subtle-grey/30">
+                            <p class="text-xs text-slate-grey/40">Hiển thị <span class="font-bold text-slate-grey" id="customers-shown-count">6</span> trong tổng số <span class="font-bold text-slate-grey" id="customers-total-count">6</span> khách hàng</p>
+                            <div class="flex items-center gap-1">
+                                <button class="p-1.5 text-slate-grey/30 hover:bg-subtle-grey rounded-lg disabled:opacity-30 focus:outline-none" disabled="">
+                                    <span class="material-symbols-outlined text-[18px]">chevron_left</span>
+                                </button>
+                                <button class="w-7 h-7 flex items-center justify-center rounded-lg bg-primary text-white text-xs font-semibold focus:outline-none">1</button>
+                                <button class="p-1.5 text-slate-grey/30 hover:bg-subtle-grey rounded-lg focus:outline-none" onclick="showNotification('Đây là bản demo front-end đầy đủ tính năng trang 1!', 'info')">
+                                    <span class="material-symbols-outlined text-[18px]">chevron_right</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ================= VIEW: THANH TOÁN (PAYMENTS) ================= -->
+                <div id="view-payments" class="crm-view space-y-8">
+                    <!-- Screen Header -->
+                    <div class="flex justify-between items-end">
+                        <div>
+                            <p class="text-xs font-semibold text-primary uppercase tracking-widest mb-1.5">Tài chính</p>
+                            <h2 class="text-2xl font-light text-slate-grey tracking-wide">Quản lý dòng tiền và doanh số</h2>
+                        </div>
+                        <button class="flex items-center gap-1.5 px-5 py-2.5 bg-primary hover:bg-primary-hover text-white rounded-btn font-semibold text-xs shadow-md shadow-primary/20 active:scale-[0.98] transition-all" onclick="openAddPaymentPanel()">
+                            <span class="material-symbols-outlined text-[18px]">add_circle</span>
+                            GHI NHẬN THANH TOÁN
+                        </button>
+                    </div>
+
+                    <!-- Bento Financial Stats (3 Cards) -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <!-- Total revenues -->
+                        <div class="glass-card p-6 rounded-card relative overflow-hidden group">
+                            <div class="absolute -right-4 -top-4 w-20 h-20 bg-primary/5 rounded-full group-hover:scale-150 transition-all duration-500"></div>
+                            <p class="text-xs font-semibold text-slate-grey/50 uppercase tracking-wider mb-2">Tổng thu tháng này</p>
+                            <div class="flex items-baseline gap-1">
+                                <span class="text-3xl font-extrabold text-primary" id="payment-stat-total">262.500.000</span>
+                                <span class="text-primary font-bold text-lg">₫</span>
+                            </div>
+                            <div class="mt-4 flex items-center gap-1.5 text-status-success text-[10px] font-bold bg-status-success/10 w-fit px-2.5 py-1 rounded-full">
+                                <span class="material-symbols-outlined text-[12px]">trending_up</span>
+                                +12.5% so với tháng trước
+                            </div>
+                        </div>
+                        <!-- Collected -->
+                        <div class="glass-card p-6 rounded-card relative overflow-hidden group">
+                            <div class="absolute -right-4 -top-4 w-20 h-20 bg-status-success/5 rounded-full group-hover:scale-150 transition-all duration-500"></div>
+                            <p class="text-xs font-semibold text-slate-grey/50 uppercase tracking-wider mb-2">Đã thu thực tế</p>
+                            <div class="flex items-baseline gap-1">
+                                <span class="text-3xl font-extrabold text-status-success" id="payment-stat-collected">185.000.000</span>
+                                <span class="text-status-success font-bold text-lg">₫</span>
+                            </div>
+                            <div class="mt-4 w-full bg-slate-grey/10 h-1.5 rounded-full overflow-hidden">
+                                <div class="bg-status-success h-full w-[70%]" id="payment-progress-bar"></div>
+                            </div>
+                            <p class="mt-2 text-[10px] text-slate-grey/40">Đạt 70% chỉ tiêu doanh số</p>
+                        </div>
+                        <!-- Pending revenues -->
+                        <div class="glass-card p-6 rounded-card relative overflow-hidden group">
+                            <div class="absolute -right-4 -top-4 w-20 h-20 bg-status-warning/5 rounded-full group-hover:scale-150 transition-all duration-500"></div>
+                            <p class="text-xs font-semibold text-slate-grey/50 uppercase tracking-wider mb-2">Chưa thu / Pending</p>
+                            <div class="flex items-baseline gap-1">
+                                <span class="text-3xl font-extrabold text-status-warning" id="payment-stat-pending">77.500.000</span>
+                                <span class="text-status-warning font-bold text-lg">₫</span>
+                            </div>
+                            <div class="mt-4 flex items-center gap-1.5 text-status-warning text-[10px] font-bold bg-status-warning/10 w-fit px-2.5 py-1 rounded-full animate-pulse">
+                                <span class="material-symbols-outlined text-[12px]">schedule</span>
+                                Cần đôn đốc thanh toán
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Column chart: Monthly cashflows -->
+                    <div class="glass-card p-6 rounded-card">
+                        <div class="flex justify-between items-center mb-8">
+                            <div>
+                                <h3 class="text-base font-semibold text-slate-grey">Dòng tiền theo tháng</h3>
+                                <p class="text-xs text-slate-grey/40">Dữ liệu 6 tháng đầu năm 2026</p>
+                            </div>
+                            <div class="flex gap-4 text-xs font-medium text-slate-grey/70">
+                                <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded bg-primary"></span><span>Thành công</span></div>
+                                <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded bg-slate-grey/15"></span><span>Pending</span></div>
+                            </div>
+                        </div>
+                        <!-- Bar Columns wrapper -->
+                        <div class="relative h-60 flex items-end justify-between gap-5 px-6 border-b border-slate-grey/10" id="payments-cashflow-chart">
+                            <div class="flex-1 flex flex-col items-center group">
+                                <div class="w-full max-w-[32px] bg-primary/20 rounded-t-lg h-[40%] group-hover:bg-primary/35 transition-all cursor-pointer relative">
+                                    <div class="absolute -top-9 left-1/2 -translate-x-1/2 bg-slate-grey text-white text-[9px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">120Tr</div>
+                                </div>
+                                <span class="mt-3 text-[10px] text-slate-grey/40 font-medium">Tháng 1</span>
+                            </div>
+                            <div class="flex-1 flex flex-col items-center group">
+                                <div class="w-full max-w-[32px] bg-primary/20 rounded-t-lg h-[55%] group-hover:bg-primary/35 transition-all cursor-pointer relative">
+                                    <div class="absolute -top-9 left-1/2 -translate-x-1/2 bg-slate-grey text-white text-[9px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">165Tr</div>
+                                </div>
+                                <span class="mt-3 text-[10px] text-slate-grey/40 font-medium">Tháng 2</span>
+                            </div>
+                            <div class="flex-1 flex flex-col items-center group">
+                                <div class="w-full max-w-[32px] bg-primary/20 rounded-t-lg h-[80%] group-hover:bg-primary/35 transition-all cursor-pointer relative">
+                                    <div class="absolute -top-9 left-1/2 -translate-x-1/2 bg-slate-grey text-white text-[9px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">240Tr</div>
+                                </div>
+                                <span class="mt-3 text-[10px] text-slate-grey/40 font-medium">Tháng 3</span>
+                            </div>
+                            <div class="flex-1 flex flex-col items-center group">
+                                <div class="w-full max-w-[32px] bg-primary/20 rounded-t-lg h-[70%] group-hover:bg-primary/35 transition-all cursor-pointer relative">
+                                    <div class="absolute -top-9 left-1/2 -translate-x-1/2 bg-slate-grey text-white text-[9px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">210Tr</div>
+                                </div>
+                                <span class="mt-3 text-[10px] text-slate-grey/40 font-medium">Tháng 4</span>
+                            </div>
+                            <div class="flex-1 flex flex-col items-center group">
+                                <div class="w-full max-w-[32px] bg-primary/20 rounded-t-lg h-[90%] group-hover:bg-primary/35 transition-all cursor-pointer relative">
+                                    <div class="absolute -top-9 left-1/2 -translate-x-1/2 bg-slate-grey text-white text-[9px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">270Tr</div>
+                                </div>
+                                <span class="mt-3 text-[10px] text-slate-grey/40 font-medium">Tháng 5</span>
+                            </div>
+                            <div class="flex-1 flex flex-col items-center group">
+                                <div class="w-full max-w-[32px] bg-primary rounded-t-lg h-[87%] shadow-[0_-4px_10px_rgba(236,119,0,0.2)] relative">
+                                    <div class="absolute -top-9 left-1/2 -translate-x-1/2 bg-slate-grey text-white text-[9px] py-1 px-2 rounded whitespace-nowrap" id="chart-height-june">262.5Tr</div>
+                                </div>
+                                <span class="mt-3 text-[10px] text-slate-grey font-bold">Tháng 6</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Payments Table Card -->
+                    <div class="glass-card rounded-card overflow-hidden">
+                        <div class="p-6 border-b border-slate-grey/5 flex justify-between items-center bg-white/50">
+                            <h3 class="text-base font-semibold text-slate-grey">Lịch sử giao dịch dịch vụ</h3>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left">
+                                <thead>
+                                    <tr class="bg-subtle-grey text-slate-grey/50 text-[10px] font-semibold uppercase tracking-wider">
+                                        <th class="px-6 py-4">Khách hàng</th>
+                                        <th class="px-6 py-4">Dịch vụ điều trị</th>
+                                        <th class="px-6 py-4">Số tiền</th>
+                                        <th class="px-6 py-4">Trạng thái</th>
+                                        <th class="px-6 py-4">Phương thức</th>
+                                        <th class="px-6 py-4">Thời gian</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-grey/5" id="payments-table-body">
+                                    <!-- Injected dynamically in script -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ================= VIEW: CÀI ĐẶT (SETTINGS) ================= -->
+                <div id="view-settings" class="crm-view space-y-8">
+                    <!-- Screen Header -->
+                    <div class="flex justify-between items-end">
+                        <div>
+                            <p class="text-xs font-semibold text-primary uppercase tracking-widest mb-1.5">Hệ thống</p>
+                            <h2 class="text-2xl font-light text-slate-grey tracking-wide">Cấu hình cài đặt & Phân quyền</h2>
+                        </div>
+                    </div>
+
+                    <!-- Main grid layout -->
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                        <!-- Left Navigation vertical bar (25%) -->
+                        <nav class="lg:col-span-3 flex flex-col gap-2">
+                            <button id="set-btn-profile" class="flex items-center gap-3 px-5 py-4 bg-primary text-white shadow-md rounded-xl text-xs font-bold transition-all text-left focus:outline-none" onclick="switchSettingsTab('profile')">
+                                <span class="material-symbols-outlined text-[20px]">person_outline</span>
+                                <span>Hồ sơ cá nhân</span>
+                            </button>
+                            <button id="set-btn-security" class="flex items-center gap-3 px-5 py-4 text-slate-grey/70 hover:bg-white hover:shadow-sm rounded-xl text-xs font-semibold transition-all text-left focus:outline-none" onclick="switchSettingsTab('security')">
+                                <span class="material-symbols-outlined text-[20px]">security</span>
+                                <span>Bảo mật nâng cao</span>
+                            </button>
+                            <button id="set-btn-members" class="flex items-center gap-3 px-5 py-4 text-slate-grey/70 hover:bg-white hover:shadow-sm rounded-xl text-xs font-semibold transition-all text-left focus:outline-none" onclick="switchSettingsTab('members')">
+                                <span class="material-symbols-outlined text-[20px]">badge</span>
+                                <span>Quản lý nhân sự</span>
+                            </button>
+                        </nav>
+
+                        <!-- Right Panel Settings Panel (75%) -->
+                        <div class="lg:col-span-9 space-y-8">
+                            
+                            <!-- TAB SETTING PANEL: Personal Profile Info -->
+                            <section id="set-panel-profile" class="settings-panel space-y-6">
+                                <div class="glass-card p-8 rounded-card">
+                                    <div class="flex justify-between items-center mb-6">
+                                        <h3 class="text-base font-bold text-slate-grey">Thông tin hồ sơ cá nhân</h3>
+                                        <button class="bg-primary hover:bg-primary-hover text-white px-5 py-2 rounded-btn text-xs font-bold shadow-md active:scale-95 transition-all" onclick="saveProfileChanges()">LƯU THAY ĐỔI</button>
+                                    </div>
+                                    <div class="flex flex-col sm:flex-row gap-10">
+                                        <!-- Avatar upload section -->
+                                        <div class="flex flex-col items-center gap-3">
+                                            <div class="relative group cursor-pointer" onclick="showNotification('Tính năng tải ảnh đại diện sẽ có ở bản nâng cấp!', 'info')">
+                                                <img id="settings-avatar-img" alt="Avatar User Large" class="w-28 h-28 rounded-3xl object-cover border-4 border-white shadow-md group-hover:brightness-90 transition-all" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBySo8VuNyUNhRqbZCTIAEVEC_FszP2aAkbKadMU7tOROLJHiVn2I7SRN7PuefEtKgf6elsnCmkkY-6E6ZCT-uV41V-y-ZDfihUeoSuv8NpgFFC_OS2PXBsmA4-CjySPLJO7RqccF7jQgqNheavmfIEmHlFvVkKyXq-QDyZlgGjnyfpj88mUbCDeXL-lMr6estcmGHBN-EbQdKNBQPm_6LvbMeTqZFPLACOspoqPhCGpSwAe5uvzTa0BVBVbaa0WQiwzpT-goGMHg"/>
+                                                <button class="absolute bottom-0 right-0 bg-primary text-white p-1.5 rounded-lg shadow hover:scale-105 transition-transform focus:outline-none">
+                                                    <span class="material-symbols-outlined text-[14px]">edit</span>
+                                                </button>
+                                            </div>
+                                            <span class="text-[10px] text-slate-grey/40 uppercase tracking-wider font-semibold">Mã: SS-SALES-88</span>
+                                        </div>
+                                        <!-- Inputs fields grid -->
+                                        <div class="flex-grow grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                            <div class="flex flex-col gap-1">
+                                                <label class="text-slate-grey/40 text-[10px] font-bold uppercase tracking-wider">Họ và tên nhân viên</label>
+                                                <input id="set-profile-name" class="input-underline py-2 font-semibold text-slate-grey" type="text" value="Nguyễn Sales"/>
+                                            </div>
+                                            <div class="flex flex-col gap-1 opacity-60">
+                                                <label class="text-slate-grey/40 text-[10px] font-bold uppercase tracking-wider">Email đăng nhập (Khóa)</label>
+                                                <div class="flex items-center gap-2 py-2 border-b border-slate-grey/10 font-semibold text-slate-grey">
+                                                    <span class="material-symbols-outlined text-[16px]">lock</span>
+                                                    <span>sales.saigon@saigonsmile.com.vn</span>
+                                                </div>
+                                            </div>
+                                            <div class="flex flex-col gap-1">
+                                                <label class="text-slate-grey/40 text-[10px] font-bold uppercase tracking-wider">Số điện thoại liên hệ</label>
+                                                <input id="set-profile-phone" class="input-underline py-2 font-semibold text-slate-grey" type="text" value="0988 888 999"/>
+                                            </div>
+                                            <div class="flex flex-col gap-1">
+                                                <label class="text-slate-grey/40 text-[10px] font-bold uppercase tracking-wider">Chức vụ điều hành</label>
+                                                <input id="set-profile-title" class="input-underline py-2 font-semibold text-slate-grey" type="text" value="Tư vấn viên trưởng"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+
+                            <!-- TAB SETTING PANEL: Security -->
+                            <section id="set-panel-security" class="settings-panel hidden space-y-6">
+                                <div class="glass-card p-8 rounded-card">
+                                    <h3 class="text-base font-bold text-slate-grey mb-6">Bảo mật & Xác thực tài khoản</h3>
+                                    <div class="divide-y divide-slate-grey/5">
+                                        <!-- Row 1: Password reset -->
+                                        <div class="flex justify-between items-center py-4">
+                                            <div>
+                                                <p class="text-sm font-semibold text-slate-grey">Đổi mật khẩu tài khoản</p>
+                                                <p class="text-xs text-slate-grey/40 mt-1">Nên cập nhật mật khẩu định kỳ 3 tháng để tránh rủi ro bảo mật dữ liệu.</p>
+                                            </div>
+                                            <button class="border border-slate-grey/15 hover:bg-subtle-grey px-4 py-2 rounded-btn text-xs font-semibold text-slate-grey focus:outline-none transition-all active:scale-[0.98]" onclick="showNotification('Form Đổi mật khẩu đang tải...', 'success')">CẬP NHẬT</button>
+                                        </div>
+                                        <!-- Row 2: Google oauth toggle -->
+                                        <div class="flex justify-between items-center py-4">
+                                            <div>
+                                                <p class="text-sm font-semibold text-slate-grey">Đăng nhập nhanh Google Workspace</p>
+                                                <p class="text-xs text-slate-grey/40 mt-1">Cho phép đăng nhập trực tiếp bằng tài khoản email Google công ty cấp.</p>
+                                            </div>
+                                            <!-- Toggle Switch -->
+                                            <label class="relative inline-flex items-center cursor-pointer">
+                                                <input checked="" class="sr-only peer" type="checkbox" onchange="showNotification('Thay đổi thiết lập Google OAuth thành công!', 'success')"/>
+                                                <div class="w-10 h-6 bg-slate-grey/15 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-grey/20 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                                            </label>
+                                        </div>
+                                        <!-- Row 3: 2FA toggle -->
+                                        <div class="flex justify-between items-center py-4">
+                                            <div>
+                                                <p class="text-sm font-semibold text-slate-grey">Xác thực 2 yếu tố (2FA)</p>
+                                                <p class="text-xs text-slate-grey/40 mt-1">Yêu cầu mã xác thực gửi về SMS hoặc Authenticator App khi đăng nhập thiết bị mới.</p>
+                                            </div>
+                                            <label class="relative inline-flex items-center cursor-pointer">
+                                                <input class="sr-only peer" type="checkbox" onchange="showNotification('Yêu cầu bật 2FA: Hãy quét mã QR được gửi về Email của bạn!', 'warning')"/>
+                                                <div class="w-10 h-6 bg-slate-grey/15 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-grey/20 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+
+                            <!-- TAB SETTING PANEL: Staff Members List -->
+                            <section id="set-panel-members" class="settings-panel hidden space-y-6">
+                                <div class="glass-card p-6 rounded-card">
+                                    <div class="mb-4">
+                                        <h3 class="text-base font-bold text-slate-grey">Quản lý nhân viên chi nhánh</h3>
+                                        <p class="text-xs text-slate-grey/40 mt-1">Danh sách nhân sự đang hoạt động tại cơ sở Saigon Smile Spa Quận 1.</p>
+                                    </div>
+                                    <div class="overflow-hidden rounded-xl border border-slate-grey/5">
+                                        <table class="w-full text-left">
+                                            <thead class="bg-subtle-grey text-[10px] text-slate-grey/50 font-semibold uppercase tracking-wider">
+                                                <tr>
+                                                    <th class="px-6 py-3.5">Nhân sự</th>
+                                                    <th class="px-6 py-3.5">Chuyên môn trị liệu</th>
+                                                    <th class="px-6 py-3.5">Trạng thái làm việc</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="divide-y divide-slate-grey/5 text-xs text-slate-grey">
+                                                <!-- Row 1 -->
+                                                <tr class="hover:bg-subtle-grey/30 transition-all">
+                                                    <td class="px-6 py-3.5 flex items-center gap-3">
+                                                        <img alt="Lê Thị Tuyết" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCHFQvFHylWtL7FlEeAsvMORYXEcBmzL1I3Ks7fBjObubbQCvnJqi-wOcxaMYe-sF9UOikOmWa7ZCv8LTA4Onc9v4x2BtF_aLjudEQyxKGOaVT-NalATIKouNicP4HQtGs9G5r8_TQ9DvDXkSxaJbQ9-5K9g6xQO_jA4n2viMwsVAv8cHSS5Co0AWPpf_aiWN7Ak57hP_8xf9BWhk6j3yRbwsjwNO3wwrFHQ4W3MGjH8UcAySyd_LsJ-3p_0HTK4vDkqwzCpSM9sg"/>
+                                                        <div>
+                                                            <p class="font-semibold text-slate-grey/90">Lê Thị Tuyết</p>
+                                                            <span class="text-[9px] text-slate-grey/40">tuyet.lt@saigonsmile.vn</span>
+                                                        </div>
+                                                    </td>
+                                                    <td class="px-6 py-3.5 text-slate-grey/70">Chăm sóc da mặt chuyên sâu</td>
+                                                    <td class="px-6 py-3.5">
+                                                        <span class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-status-success/10 text-status-success uppercase">ĐANG LÀM</span>
+                                                    </td>
+                                                </tr>
+                                                <!-- Row 2 -->
+                                                <tr class="hover:bg-subtle-grey/30 transition-all">
+                                                    <td class="px-6 py-3.5 flex items-center gap-3">
+                                                        <img alt="Trần Văn Nam" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDX0fJ98rS0eIposFgPQzCO1ceeqSGE8f90YMt4kLivjbjM1BYLHIT8dNsTy1rsZRPZ8BEr3UyC3xV0tT_K_AxPzcYtZvGycM77d_WnfdpM5_avpzq7o5ZTMVg_FzX1fSkC7A48ohNrMYAiKQkdWsz_JJH203xoWE5rpEn9PTwOswakAjvnKrPus484TRdSMRaR536ecJ5xp6wOt7f9LzebLrUQHD6WBLXFRhG1rLhNzbkZ1VsMEJCya5clCe8rGxCgunFHaRgMsQ"/>
+                                                        <div>
+                                                            <p class="font-semibold text-slate-grey/90">Trần Văn Nam</p>
+                                                            <span class="text-[9px] text-slate-grey/40">nam.tv@saigonsmile.vn</span>
+                                                        </div>
+                                                    </td>
+                                                    <td class="px-6 py-3.5 text-slate-grey/70">Điều trị nâng cơ công nghệ cao</td>
+                                                    <td class="px-6 py-3.5">
+                                                        <span class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-status-warning/10 text-status-warning uppercase">NGHỈ PHÉP</span>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= SLIDE-OVER PANEL: ADD NEW CLIENT ================= -->
+    <div id="slideover-lead-panel" class="hidden fixed inset-0 z-[5000] overflow-hidden">
+        <!-- Backdrop blurred dark overlay -->
+        <div class="absolute inset-0 bg-slate-grey/30 backdrop-blur-[4px] transition-opacity duration-300" onclick="closeAddLeadPanel()"></div>
+        
+        <div class="absolute inset-y-0 right-0 max-w-full flex pl-10">
+            <!-- Slide element panel -->
+            <div class="w-screen max-w-md bg-white flex flex-col shadow-2xl relative">
+                <!-- Panel Header -->
+                <div class="px-6 py-5 border-b border-slate-grey/5 flex items-center justify-between">
+                    <h3 class="text-lg font-light text-slate-grey flex items-center gap-1.5"><span class="material-symbols-outlined text-primary">person_add</span> Thêm khách hàng mới</h3>
+                    <button class="text-slate-grey/40 hover:text-primary p-1 rounded-full hover:bg-subtle-grey focus:outline-none transition-all" onclick="closeAddLeadPanel()">
+                        <span class="material-symbols-outlined">close</span>
+                    </button>
+                </div>
+                
+                <!-- Panel Body (Scrollable form content) -->
+                <div class="flex-1 overflow-y-auto px-6 py-6 space-y-6">
+                    <!-- Form section 1: Base -->
+                    <div class="space-y-4">
+                        <p class="text-[10px] font-bold text-slate-grey/40 uppercase tracking-widest border-b border-slate-grey/5 pb-1">Thông tin cơ bản</p>
+                        <!-- Full Name -->
+                        <div class="flex flex-col gap-1">
+                            <label class="text-xs font-semibold text-slate-grey/80">Họ và tên khách hàng *</label>
+                            <input id="add-lead-name" class="input-underline py-2 text-slate-grey text-xs placeholder:text-slate-grey/30" placeholder="Nguyễn Thị Mai" type="text" required/>
+                        </div>
+                        <!-- Phone Number -->
+                        <div class="flex flex-col gap-1">
+                            <label class="text-xs font-semibold text-slate-grey/80">Số điện thoại liên hệ *</label>
+                            <input id="add-lead-phone" class="input-underline py-2 text-slate-grey text-xs placeholder:text-slate-grey/30" placeholder="0901.234.567" type="tel" required/>
+                        </div>
+                        <!-- Email -->
+                        <div class="flex flex-col gap-1">
+                            <label class="text-xs font-semibold text-slate-grey/80">Email cá nhân</label>
+                            <input id="add-lead-email" class="input-underline py-2 text-slate-grey text-xs placeholder:text-slate-grey/30" placeholder="mai.nguyen@gmail.com" type="email"/>
+                        </div>
+                        <!-- Address -->
+                        <div class="flex flex-col gap-1">
+                            <label class="text-xs font-semibold text-slate-grey/80">Khu vực sinh sống</label>
+                            <input id="add-lead-address" class="input-underline py-2 text-slate-grey text-xs placeholder:text-slate-grey/30" placeholder="Hà Nội" type="text"/>
+                        </div>
+                    </div>
+
+                    <!-- Form section 2: CRM settings -->
+                    <div class="space-y-4 pt-4 border-t border-slate-grey/5">
+                        <p class="text-[10px] font-bold text-slate-grey/40 uppercase tracking-widest border-b border-slate-grey/5 pb-1">Thông tin kinh doanh</p>
+                        <!-- Company -->
+                        <div class="flex flex-col gap-1">
+                            <label class="text-xs font-semibold text-slate-grey/80">Công ty / Tổ chức</label>
+                            <input id="add-lead-company" class="input-underline py-2 text-slate-grey text-xs placeholder:text-slate-grey/30" placeholder="Vietnam Airlines" type="text"/>
+                        </div>
+                        <!-- Segment selection -->
+                        <div class="flex flex-col gap-1">
+                            <label class="text-xs font-semibold text-slate-grey/80">Phân khúc khách hàng</label>
+                            <select id="add-lead-segment" class="w-full bg-[#FAFAFA] border border-slate-grey/10 rounded-xl py-2 px-3 text-xs text-slate-grey cursor-pointer">
+                                <option value="Khách mới">Khách mới</option>
+                                <option value="Tiềm năng cao">Tiềm năng cao</option>
+                                <option value="VIP Platinum">VIP Platinum</option>
+                                <option value="VIP Diamond">VIP Diamond</option>
+                                <option value="Doanh nghiệp">Doanh nghiệp</option>
+                                <option value="Đối tác">Đối tác</option>
+                            </select>
+                        </div>
+                        <!-- Interest list multiselect simulated chips -->
+                        <div class="flex flex-col gap-1.5">
+                            <label class="text-xs font-semibold text-slate-grey/80">Dịch vụ quan tâm chính</label>
+                            <div class="flex flex-wrap gap-2 py-1">
+                                <button type="button" class="interest-chip px-3 py-1.5 border border-slate-grey/10 rounded-lg text-[10px] font-semibold text-slate-grey/60 hover:text-primary transition-all bg-[#FAFAFA]" onclick="toggleChip(this)">Trẻ hóa da</button>
+                                <button type="button" class="interest-chip px-3 py-1.5 border border-slate-grey/10 rounded-lg text-[10px] font-semibold text-slate-grey/60 hover:text-primary transition-all bg-[#FAFAFA]" onclick="toggleChip(this)">Giảm béo</button>
+                                <button type="button" class="interest-chip px-3 py-1.5 border border-slate-grey/10 rounded-lg text-[10px] font-semibold text-slate-grey/60 hover:text-primary transition-all bg-[#FAFAFA]" onclick="toggleChip(this)">Làm trắng da</button>
+                                <button type="button" class="interest-chip px-3 py-1.5 border border-slate-grey/10 rounded-lg text-[10px] font-semibold text-slate-grey/60 hover:text-primary transition-all bg-[#FAFAFA]" onclick="toggleChip(this)">Trị nám</button>
+                                <button type="button" class="interest-chip px-3 py-1.5 border border-slate-grey/10 rounded-lg text-[10px] font-semibold text-slate-grey/60 hover:text-primary transition-all bg-[#FAFAFA]" onclick="toggleChip(this)">Chăm sóc da</button>
+                                <button type="button" class="interest-chip px-3 py-1.5 border border-slate-grey/10 rounded-lg text-[10px] font-semibold text-slate-grey/60 hover:text-primary transition-all bg-[#FAFAFA]" onclick="toggleChip(this)">Nâng cơ Hifu</button>
+                            </div>
+                        </div>
+                        <!-- Expected value -->
+                        <div class="flex flex-col gap-1">
+                            <label class="text-xs font-semibold text-slate-grey/80">Giá trị dự kiến (VND)</label>
+                            <input id="add-lead-value" class="input-underline py-2 text-slate-grey text-xs placeholder:text-slate-grey/30 font-semibold" placeholder="25.000.000" type="number"/>
+                        </div>
+                        <!-- Initial pipeline stage -->
+                        <div class="flex flex-col gap-1">
+                            <label class="text-xs font-semibold text-slate-grey/80">Giai đoạn tiếp nhận ban đầu</label>
+                            <select id="add-lead-stage" class="w-full bg-[#FAFAFA] border border-slate-grey/10 rounded-xl py-2 px-3 text-xs text-slate-grey cursor-pointer">
+                                <option value="stage-new">Mới nhận</option>
+                                <option value="stage-contact">Đang liên hệ</option>
+                                <option value="stage-consulted">Đã tư vấn</option>
+                                <option value="stage-waiting">Chờ đặt lịch</option>
+                                <option value="stage-scheduled">Đã đặt lịch</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Panel Footer Sticky -->
+                <div class="px-6 py-4 border-t border-slate-grey/5 bg-subtle-grey/30 flex gap-3">
+                    <button class="flex-1 py-3 text-slate-grey text-xs font-bold border border-slate-grey/15 rounded-btn hover:bg-subtle-grey transition-all focus:outline-none" onclick="closeAddLeadPanel()">HỦY BỎ</button>
+                    <button class="flex-1 py-3 bg-primary hover:bg-primary-hover text-white text-xs font-bold rounded-btn transition-all shadow-md focus:outline-none" onclick="addLeadSubmit()">LƯU KHÁCH HÀNG</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= SLIDE-OVER PANEL: RECORD PAYMENT ================= -->
+    <div id="slideover-payment-panel" class="hidden fixed inset-0 z-[5000] overflow-hidden">
+        <!-- Backdrop overlay -->
+        <div class="absolute inset-0 bg-slate-grey/30 backdrop-blur-[4px]" onclick="closeAddPaymentPanel()"></div>
+        <div class="absolute inset-y-0 right-0 max-w-full flex pl-10">
+            <div class="w-screen max-w-md bg-white flex flex-col shadow-2xl">
+                <!-- Header -->
+                <div class="px-6 py-5 border-b border-slate-grey/5 flex items-center justify-between">
+                    <h3 class="text-lg font-light text-slate-grey flex items-center gap-1.5"><span class="material-symbols-outlined text-primary">add_circle</span> Ghi nhận thanh toán mới</h3>
+                    <button class="text-slate-grey/40 hover:text-primary p-1 rounded-full hover:bg-subtle-grey focus:outline-none transition-all" onclick="closeAddPaymentPanel()">
+                        <span class="material-symbols-outlined">close</span>
+                    </button>
+                </div>
+                <!-- Body -->
+                <div class="flex-1 overflow-y-auto px-6 py-6 space-y-6">
+                    <div class="flex flex-col gap-1">
+                        <label class="text-xs font-semibold text-slate-grey/80">Khách hàng thanh toán *</label>
+                        <select id="add-pay-client" class="w-full bg-[#FAFAFA] border border-slate-grey/10 rounded-xl py-2 px-3 text-xs text-slate-grey cursor-pointer">
+                            <!-- Populated options in script -->
+                        </select>
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <label class="text-xs font-semibold text-slate-grey/80">Dịch vụ thanh toán *</label>
+                        <input id="add-pay-service" class="input-underline py-2 text-slate-grey text-xs placeholder:text-slate-grey/30" placeholder="Liệu trình Meso căng bóng" type="text" required/>
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <label class="text-xs font-semibold text-slate-grey/80">Số tiền thanh toán (VND) *</label>
+                        <input id="add-pay-amount" class="input-underline py-2 text-slate-grey text-xs placeholder:text-slate-grey/30 font-semibold" placeholder="25.000.000" type="number" required/>
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <label class="text-xs font-semibold text-slate-grey/80">Trạng thái giao dịch</label>
+                        <select id="add-pay-status" class="w-full bg-[#FAFAFA] border border-slate-grey/10 rounded-xl py-2 px-3 text-xs text-slate-grey cursor-pointer">
+                            <option value="Hoàn thành">Hoàn thành</option>
+                            <option value="Đang xử lý">Đang xử lý</option>
+                        </select>
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <label class="text-xs font-semibold text-slate-grey/80">Hình thức thanh toán</label>
+                        <select id="add-pay-method" class="w-full bg-[#FAFAFA] border border-slate-grey/10 rounded-xl py-2 px-3 text-xs text-slate-grey cursor-pointer">
+                            <option value="Chuyển khoản">Chuyển khoản ngân hàng</option>
+                            <option value="Tiền mặt">Tiền mặt tại quầy</option>
+                        </select>
+                    </div>
+                </div>
+                <!-- Footer -->
+                <div class="px-6 py-4 border-t border-slate-grey/5 bg-subtle-grey/30 flex gap-3">
+                    <button class="flex-1 py-3 text-slate-grey text-xs font-bold border border-slate-grey/15 rounded-btn hover:bg-subtle-grey transition-all focus:outline-none" onclick="closeAddPaymentPanel()">HỦY BỎ</button>
+                    <button class="flex-1 py-3 bg-primary hover:bg-primary-hover text-white text-xs font-bold rounded-btn transition-all shadow-md focus:outline-none" onclick="addPaymentSubmit()">GHI NHẬN</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- ======================== CORE JAVASCRIPT SYSTEM ======================== -->
+    <!-- ========================================================================= -->
+    <script>
+        // ================= DATABASE STATE IN-MEMORY =================
+        let leads = [
+            {
+                id: "lead-1",
+                fullName: "Nguyễn Thị Lan Anh",
+                company: "Tập đoàn Vingroup",
+                segment: "VIP Diamond",
+                phone: "0912.345.678",
+                email: "lananh@vingroup.com",
+                address: "Hà Nội",
+                interests: ["Trẻ hóa da Thermage FLX", "Liệu trình Meso căng bóng"],
+                expectedValue: 35000000,
+                stage: "stage-consulted", // Đã tư vấn
+                assignedTo: "Anh Minh Sales",
+                createdAt: "12/05/2026",
+                notes: [
+                    { time: "12/05/2026 14:30", author: "Anh Minh Sales", content: "Khách hàng rất quan tâm tới Meso căng bóng, muốn sắp xếp lịch khám soi da vào tuần tới." },
+                    { time: "12/05/2026 10:15", author: "Hệ thống", content: "Tạo cơ hội bán hàng từ chiến dịch Remarketing Thẩm mỹ cao cấp." }
+                ],
+                history: [
+                    { time: "12/05/2026 14:30", action: "Thêm ghi chú cuộc gọi thành công." },
+                    { time: "12/05/2026 10:15", action: "Được tiếp nhận bởi nhân viên Anh Minh Sales." }
+                ]
+            },
+            {
+                id: "lead-2",
+                fullName: "Lê Văn Hoàng",
+                company: "Ngân hàng Vietcombank",
+                segment: "Doanh nghiệp",
+                phone: "0904.111.222",
+                email: "hoang.le@vietcombank.com.vn",
+                address: "TP. Hồ Chí Minh",
+                interests: ["Gói chăm sóc da toàn diện cho cán bộ nhân viên"],
+                expectedValue: 120000000,
+                stage: "stage-scheduled", // Đã đặt lịch
+                assignedTo: "Anh Minh Sales",
+                createdAt: "14/05/2026",
+                notes: [
+                    { time: "14/05/2026 16:00", author: "Anh Minh Sales", content: "Đã thống nhất giá trị hợp đồng chăm sóc da cao cấp dành cho 50 cán bộ nhân viên." }
+                ],
+                history: [
+                    { time: "14/05/2026 16:00", action: "Chuyển giai đoạn cơ hội lên Đã đặt lịch." }
+                ]
+            },
+            {
+                id: "lead-3",
+                fullName: "Phạm Thu Trang",
+                company: "FPT Software",
+                segment: "Tiềm năng cao",
+                phone: "0989.222.333",
+                email: "trang.pt@fsoft.fpt.vn",
+                address: "Đà Nẵng",
+                interests: ["Liệu trình Giảm béo chuyên sâu"],
+                expectedValue: 22000000,
+                stage: "stage-contact", // Đang liên hệ
+                assignedTo: "Thu Hà Sales",
+                createdAt: "15/05/2026",
+                notes: [
+                    { time: "15/05/2026 09:30", author: "Thu Hà Sales", content: "Khách bận họp, hẹn gọi lại tư vấn chi tiết về liệu trình giảm béo vào sáng mai." }
+                ],
+                history: [
+                    { time: "15/05/2026 09:30", action: "Cập nhật cuộc gọi tư vấn lần 1." }
+                ]
+            },
+            {
+                id: "lead-4",
+                fullName: "Đặng Minh Hùng",
+                company: "Masan Group",
+                segment: "Khách mới",
+                phone: "0977.888.999",
+                email: "hung.dm@masan.vn",
+                address: "Bình Dương",
+                interests: ["Trị nám & Chăm sóc da định kỳ"],
+                expectedValue: 15500000,
+                stage: "stage-new", // Mới nhận
+                assignedTo: "Quốc Bảo Sales",
+                createdAt: "16/05/2026",
+                notes: [],
+                history: [
+                    { time: "16/05/2026 08:00", action: "Tạo cơ hội từ form đăng ký Website." }
+                ]
+            },
+            {
+                id: "lead-5",
+                fullName: "Vũ Kim Chi",
+                company: "Vietnam Airlines",
+                segment: "VIP Platinum",
+                phone: "0915.777.888",
+                email: "chivk@vietnamairlines.com",
+                address: "Hà Nội",
+                interests: ["Tắm trắng Collagen 4D", "Trẻ hóa công nghệ cao"],
+                expectedValue: 42000000,
+                stage: "stage-waiting", // Chờ đặt lịch
+                assignedTo: "Mai Linh Sales",
+                createdAt: "13/05/2026",
+                notes: [
+                    { time: "13/05/2026 14:00", author: "Mai Linh Sales", content: "Khách hàng hài lòng sau buổi soi da thử, đang thu xếp tài chính để chốt combo làm trắng." }
+                ],
+                history: [
+                    { time: "13/05/2026 14:00", action: "Xác nhận kết quả buổi soi da mẫu." }
+                ]
+            },
+            {
+                id: "lead-6",
+                fullName: "Hoàng Quốc Bảo",
+                company: "Tập đoàn Hòa Phát",
+                segment: "Đối tác",
+                phone: "0983.555.666",
+                email: "baohq@hoaphat.com.vn",
+                address: "Hải Phòng",
+                interests: ["Liệu trình Căng chỉ Collagen", "Trị liệu công nghệ cao"],
+                expectedValue: 28000000,
+                stage: "stage-contact", // Đang liên hệ
+                assignedTo: "Anh Minh Sales",
+                createdAt: "10/05/2026",
+                notes: [],
+                history: [
+                    { time: "10/05/2026 10:00", action: "Phân bổ đối tác từ bộ phận kinh doanh chi nhánh." }
+                ]
+            }
+        ];
+
+        let tasks = [
+            {
+                id: "task-1",
+                leadId: "lead-1",
+                leadName: "Nguyễn Thị Lan Anh",
+                title: "Gửi báo giá Combo Trẻ hóa da 'Thermage Gold' cho chị Lan Anh",
+                priority: "high", // Cao -> đỏ
+                dueDate: "Hôm nay, 15:00",
+                isOverdue: true,
+                completed: false
+            },
+            {
+                id: "task-2",
+                leadId: "lead-3",
+                leadName: "Phạm Thu Trang",
+                title: "Gọi điện xác nhận lịch hẹn tư vấn Giảm béo cho chị Trang",
+                priority: "medium", // Trung bình -> vàng
+                dueDate: "Ngày mai, 09:30",
+                isOverdue: false,
+                completed: false
+            },
+            {
+                id: "task-3",
+                leadId: "lead-2",
+                leadName: "Lê Văn Hoàng",
+                title: "Soạn hợp đồng gói Chăm sóc da toàn diện cho Vietcombank",
+                priority: "high",
+                dueDate: "Thứ Sáu, 17:00",
+                isOverdue: false,
+                completed: false
+            },
+            {
+                id: "task-4",
+                leadId: "lead-4",
+                leadName: "Đặng Minh Hùng",
+                title: "Gửi thông tin liệu trình Trị nám mới nhất cho anh Hùng qua Zalo",
+                priority: "low", // Thấp -> Slate
+                dueDate: "Ngày mai, 10:00",
+                isOverdue: false,
+                completed: false
+            },
+            {
+                id: "task-5",
+                leadId: "lead-5",
+                leadName: "Vũ Kim Chi",
+                title: "Kiểm tra phản hồi sau buổi tắm trắng đầu tiên của chị Kim Chi",
+                priority: "medium",
+                dueDate: "Hôm nay, 14:00",
+                isOverdue: true,
+                completed: false
+            }
+        ];
+
+        let payments = [
+            {
+                id: "pay-1",
+                leadName: "Lê Văn Hoàng",
+                service: "Gói chăm sóc toàn diện Vietcombank",
+                amount: 120000000,
+                method: "Chuyển khoản",
+                status: "Hoàn thành",
+                date: "14/05/2026 14:20"
+            },
+            {
+                id: "pay-2",
+                leadName: "Vũ Kim Chi",
+                service: "Tắm trắng Collagen 4D",
+                amount: 42000000,
+                method: "Tiền mặt",
+                status: "Đang xử lý",
+                date: "13/05/2026 10:45"
+            },
+            {
+                id: "pay-3",
+                leadName: "Nguyễn Thị Lan Anh",
+                service: "Trẻ hóa da Thermage FLX",
+                amount: 35000000,
+                method: "Chuyển khoản",
+                status: "Hoàn thành",
+                date: "12/05/2026 16:30"
+            },
+            {
+                id: "pay-4",
+                leadName: "Hoàng Quốc Bảo",
+                service: "Liệu trình Căng chỉ Collagen",
+                amount: 28000000,
+                method: "Tiền mặt",
+                status: "Hoàn thành",
+                date: "10/05/2026 09:15"
+            }
+        ];
+
+        let currentUser = {
+            fullName: "Nguyễn Sales",
+            phone: "0988 888 999",
+            title: "Tư vấn viên trưởng"
+        };
+
+        const stages = [
+            { id: "stage-new", name: "Mới nhận" },
+            { id: "stage-contact", name: "Đang liên hệ" },
+            { id: "stage-consulted", name: "Đã tư vấn" },
+            { id: "stage-waiting", name: "Chờ đặt lịch" },
+            { id: "stage-scheduled", name: "Đã đặt lịch" },
+            { id: "stage-won", name: "Thành công" },
+            { id: "stage-lost", name: "Thất bại" }
+        ];
+
+        // Global dynamic routing history
+        let previousTab = "dashboard";
+        let activeTab = "dashboard";
+        let selectedLeadId = null;
+
+        // ================= BOOTSTRAP INITIALIZATION =================
+        window.addEventListener("DOMContentLoaded", () => {
+            // Set current calendar date dynamically
+            const today = new Date();
+            const dateStr = today.getDate().toString().padStart(2, '0') + '/' + 
+                            (today.getMonth() + 1).toString().padStart(2, '0') + '/' + 
+                            today.getFullYear();
+            document.getElementById("current-date-span").innerText = dateStr;
+            
+            // Render initial database tables and metrics
+            refreshAllViews();
+        });
+
+        function refreshAllViews() {
+            renderDashboardStats();
+            renderDashboardTasks();
+            renderKanbanPipeline();
+            renderTasksList();
+            renderCustomersTable();
+            renderPaymentsTable();
+            renderPaymentsOverview();
+        }
+
+        // ================= ROUTING NAVIGATION SYSTEM =================
+        function switchTab(tabId) {
+            // Store previous tab unless navigating within detail pages
+            if (activeTab !== "lead-detail" && activeTab !== tabId) {
+                previousTab = activeTab;
+            }
+            
+            // Remove active classes from navigation sidebar
+            const sidebarMenus = ["dashboard", "kanban", "tasks", "customers", "payments", "settings"];
+            sidebarMenus.forEach(menu => {
+                const el = document.getElementById("menu-" + menu);
+                if (el) {
+                    el.classList.remove("border-l-4", "border-primary", "bg-primary-container/10", "text-primary", "font-bold", "active-menu-item");
+                    el.classList.add("text-slate-grey", "hover:bg-subtle-grey/80");
+                }
+            });
+
+            // Set active class to clicked menu item
+            if (sidebarMenus.includes(tabId)) {
+                const el = document.getElementById("menu-" + tabId);
+                if (el) {
+                    el.classList.remove("text-slate-grey", "hover:bg-subtle-grey/80");
+                    el.classList.add("border-l-4", "border-primary", "bg-primary-container/10", "text-primary", "font-bold", "active-menu-item");
+                }
+            }
+
+            // Toggle HTML active display class
+            const views = ["login", "dashboard", "kanban", "tasks", "customers", "payments", "settings", "lead-detail"];
+            views.forEach(view => {
+                const el = document.getElementById("view-" + view);
+                if (el) el.classList.remove("active");
+            });
+
+            const targetView = document.getElementById("view-" + tabId);
+            if (targetView) targetView.classList.add("active");
+            
+            activeTab = tabId;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function goBackToPreviousTab() {
+            switchTab(previousTab);
+        }
+
+        // ================= LOGIN SUBMISSION =================
+        function handleLoginSubmit(event) {
+            event.preventDefault();
+            const email = document.getElementById("login-email").value;
+            showNotification(`Đăng nhập thành công với vai trò: ${email === "admin@saigonsmile.vn" ? "Admin" : "Sales"}`, "success");
+            
+            document.getElementById("view-login").classList.remove("active");
+            document.getElementById("crm-layout").classList.remove("hidden");
+            switchTab("dashboard");
+        }
+
+        function handleSocialLogin() {
+            showNotification("Đăng nhập liên kết Google Workspace thành công!", "success");
+            document.getElementById("view-login").classList.remove("active");
+            document.getElementById("crm-layout").classList.remove("hidden");
+            switchTab("dashboard");
+        }
+
+        function handleLogout() {
+            showNotification("Bạn đã đăng xuất khỏi phiên làm việc.", "warning");
+            document.getElementById("crm-layout").classList.add("hidden");
+            document.getElementById("view-login").classList.add("active");
+            activeTab = "login";
+        }
+
+        function togglePasswordVisibility(btn) {
+            const input = btn.previousElementSibling;
+            const span = btn.querySelector("span");
+            if (input.type === "password") {
+                input.type = "text";
+                span.innerText = "visibility_off";
+            } else {
+                input.type = "password";
+                span.innerText = "visibility";
+            }
+        }
+
+        // ================= NOTIFICATION TOAST GENERATOR =================
+        function showNotification(message, type = "success") {
+            const container = document.getElementById("toast-container");
+            const toast = document.createElement("div");
+            
+            let bg = "bg-white";
+            let text = "text-slate-grey";
+            let border = "border-slate-grey/10";
+            let icon = "info";
+            let iconColor = "text-primary";
+
+            if (type === "success") {
+                bg = "bg-white";
+                border = "border-status-success/20";
+                icon = "check_circle";
+                iconColor = "text-status-success";
+            } else if (type === "warning") {
+                bg = "bg-white";
+                border = "border-status-warning/20";
+                icon = "warning";
+                iconColor = "text-status-warning";
+            } else if (type === "error") {
+                bg = "bg-white";
+                border = "border-status-error/20";
+                icon = "error";
+                iconColor = "text-status-error";
+            }
+
+            toast.className = `flex items-center gap-3 px-4 py-3 rounded-xl border ${border} ${bg} ${text} shadow-xl max-w-sm transition-all duration-300 transform translate-x-12 opacity-0 z-[9999]`;
+            toast.innerHTML = `
+                <span class="material-symbols-outlined ${iconColor} text-[22px] flex-shrink-0">${icon}</span>
+                <p class="text-xs font-semibold leading-normal flex-grow">${message}</p>
+                <button class="text-slate-grey/30 hover:text-slate-grey focus:outline-none" onclick="this.parentElement.remove()">
+                    <span class="material-symbols-outlined text-[16px]">close</span>
+                </button>
+            `;
+
+            container.appendChild(toast);
+            
+            // Animation trigger
+            setTimeout(() => {
+                toast.classList.remove("translate-x-12", "opacity-0");
+            }, 50);
+
+            // Auto dismiss
+            setTimeout(() => {
+                toast.classList.add("translate-x-12", "opacity-0");
+                setTimeout(() => {
+                    toast.remove();
+                }, 300);
+            }, 4500);
+        }
+
+        // ================= UTILITY FORMATTERS =================
+        function formatVND(value) {
+            return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value).replace('₫', 'VND');
+        }
+
+        function getInitialLetters(name) {
+            return name.split(' ').map(n => n[0]).slice(-2).join('').toUpperCase();
+        }
+
+        // ================= RENDERING: DASHBOARD =================
+        function renderDashboardStats() {
+            const activeLeads = leads.filter(l => l.stage !== 'stage-won' && l.stage !== 'stage-lost');
+            document.getElementById("stat-new-leads").innerText = leads.filter(l => l.stage === 'stage-new').length + 5; // Added offset for realism
+            
+            const confirmedAppts = leads.filter(l => l.stage === 'stage-scheduled').length;
+            document.getElementById("stat-confirmed-appts").innerText = confirmedAppts;
+
+            const expectedValSum = leads.reduce((sum, current) => sum + Number(current.expectedValue), 0);
+            document.getElementById("stat-expected-value").innerText = formatVND(expectedValSum);
+
+            const overdueTasks = tasks.filter(t => t.isOverdue && !t.completed).length;
+            document.getElementById("stat-overdue-tasks").innerText = overdueTasks;
+            
+            const badge = document.getElementById("stat-overdue-badge");
+            if (overdueTasks > 0) {
+                badge.className = "text-status-error text-xs font-bold bg-status-error/10 px-2 py-0.5 rounded-full animate-pulse";
+            } else {
+                badge.className = "text-slate-grey/40 text-xs font-bold bg-subtle-grey px-2 py-0.5 rounded-full";
+                badge.innerText = "Đã xử lý";
+            }
+        }
+
+        function renderDashboardTasks() {
+            const container = document.getElementById("dashboard-urgent-tasks");
+            container.innerHTML = "";
+
+            const incompleteTasks = tasks.filter(t => !t.completed).slice(0, 3);
+            if (incompleteTasks.length === 0) {
+                container.innerHTML = `<div class="py-4 text-xs font-medium text-slate-grey/40 text-center">Tuyệt vời! Bạn không có công việc nào khẩn cấp cần làm.</div>`;
+                return;
+            }
+
+            incompleteTasks.forEach(task => {
+                let priorityClass = "bg-status-success/10 text-status-success";
+                let priorityText = "Thấp";
+                if (task.priority === "high") {
+                    priorityClass = "bg-status-error/10 text-status-error";
+                    priorityText = "Cao";
+                } else if (task.priority === "medium") {
+                    priorityClass = "bg-status-warning/10 text-status-warning";
+                    priorityText = "Trung bình";
+                }
+
+                const taskRow = document.createElement("div");
+                taskRow.className = "py-3.5 flex flex-wrap items-center justify-between gap-4";
+                taskRow.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <input type="checkbox" class="rounded-full border-slate-grey/25 text-primary focus:ring-primary w-5 h-5 cursor-pointer" onchange="toggleTaskComplete('${task.id}', this)"/>
+                        <div>
+                            <h5 class="text-xs font-bold text-slate-grey hover:text-primary transition-colors cursor-pointer" onclick="openLeadProfile('${task.leadId}')">${task.title}</h5>
+                            <span class="inline-block text-[10px] text-slate-grey/40 font-semibold mt-1">Liên quan: ${task.leadName}</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <span class="px-2.5 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider ${priorityClass}">${priorityText}</span>
+                        <span class="text-[10px] text-status-error font-semibold flex items-center gap-1"><span class="material-symbols-outlined text-[12px]">schedule</span> ${task.dueDate}</span>
+                        <button class="px-3.5 py-1.5 bg-primary/10 hover:bg-primary text-primary hover:text-white rounded-lg text-[10px] font-bold transition-all focus:outline-none" onclick="openLeadProfile('${task.leadId}')">XỬ LÝ</button>
+                    </div>
+                `;
+                container.appendChild(taskRow);
+            });
+        }
+
+        // ================= RENDERING: KANBAN PIPELINE =================
+        function renderKanbanPipeline() {
+            const container = document.getElementById("kanban-pipeline-container");
+            container.innerHTML = "";
+
+            stages.forEach((stage, idx) => {
+                const stageLeads = leads.filter(l => l.stage === stage.id);
+                const stageTotalVal = stageLeads.reduce((sum, curr) => sum + Number(curr.expectedValue), 0);
+
+                const col = document.createElement("div");
+                col.className = "w-[290px] bg-[#F8F8F8] rounded-[20px] flex flex-col p-4 border border-slate-grey/5";
+                col.setAttribute("data-stage-id", stage.id);
+                
+                // Column drag and drop events
+                col.addEventListener("dragover", dragOver);
+                col.addEventListener("dragenter", dragEnter);
+                col.addEventListener("dragleave", dragLeave);
+                col.addEventListener("drop", dragDrop);
+
+                col.innerHTML = `
+                    <div class="flex items-center justify-between mb-4 px-1 flex-shrink-0">
+                        <div class="flex items-center gap-2">
+                            <h3 class="font-semibold text-xs text-slate-grey/85">${stage.name}</h3>
+                            <span class="bg-primary/10 text-primary text-[10px] px-2 py-0.5 rounded-full font-bold">${stageLeads.length}</span>
+                        </div>
+                        <span class="material-symbols-outlined text-slate-grey/30 hover:text-primary text-[18px] cursor-pointer" onclick="showNotification('Tùy chỉnh cột sẽ mở ở bản cập nhật kế tiếp!', 'info')">more_horiz</span>
+                    </div>
+                    <!-- Value Summary -->
+                    <div class="text-[10px] text-slate-grey/40 font-bold uppercase tracking-wider mb-4 px-1">Tổng: ${formatVND(stageTotalVal)}</div>
+                    
+                    <!-- Kanban Cards Container -->
+                    <div class="space-y-3.5 overflow-y-auto flex-grow kanban-column" id="kanban-stage-${stage.id}">
+                        <!-- Lead cards inserted here -->
+                    </div>
+                `;
+
+                const cardsContainer = col.querySelector(`#kanban-stage-${stage.id}`);
+                if (stageLeads.length === 0) {
+                    cardsContainer.innerHTML = `
+                        <div class="h-32 border border-dashed border-slate-grey/15 rounded-xl flex flex-col items-center justify-center gap-1.5 text-slate-grey/30">
+                            <span class="material-symbols-outlined text-[20px]">inbox</span>
+                            <span class="text-[9px] font-semibold">Chưa có cơ hội</span>
+                        </div>
+                    `;
+                } else {
+                    stageLeads.forEach(lead => {
+                        const card = document.createElement("div");
+                        card.className = "kanban-card bg-white p-4 rounded-[16px] shadow-sm border border-slate-grey/5 hover:border-primary/20 transition-all select-none";
+                        card.setAttribute("draggable", "true");
+                        card.setAttribute("data-lead-id", lead.id);
+                        
+                        card.addEventListener("dragstart", dragStart);
+                        card.addEventListener("dragend", dragEnd);
+                        card.addEventListener("click", () => openLeadProfile(lead.id));
+
+                        let segmentClass = "bg-status-info/10 text-status-info";
+                        if (lead.segment.includes("VIP")) {
+                            segmentClass = "bg-primary/10 text-primary";
+                        } else if (lead.segment === "Doanh nghiệp") {
+                            segmentClass = "bg-purple-500/10 text-purple-600";
+                        }
+
+                        card.innerHTML = `
+                            <div class="flex justify-between items-start mb-2.5">
+                                <span class="px-2.5 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider ${segmentClass}">${lead.segment}</span>
+                                <span class="material-symbols-outlined text-slate-grey/20 text-[18px] cursor-grab">drag_indicator</span>
+                            </div>
+                            <p class="font-bold text-xs text-slate-grey mb-1.5 hover:text-primary transition-colors">${lead.fullName}</p>
+                            <p class="text-[10px] text-slate-grey/40 font-medium mb-3">${lead.company || "Cá nhân"}</p>
+                            
+                            <!-- Interests tag -->
+                            <div class="flex items-center gap-1 text-[10px] text-slate-grey/65 bg-subtle-grey p-2 rounded-lg mb-3">
+                                <span class="material-symbols-outlined text-[14px] text-primary">spa</span>
+                                <span class="truncate font-semibold">${lead.interests[0] || "Trị liệu da cao cấp"}</span>
+                            </div>
+                            
+                            <div class="flex justify-between items-center border-t border-slate-grey/5 pt-2.5">
+                                <span class="text-primary font-bold text-xs">${formatVND(lead.expectedValue)}</span>
+                                <div class="w-5 h-5 rounded-full bg-primary/10 text-primary flex items-center justify-center text-[8px] font-bold">${getInitialLetters(lead.fullName)}</div>
+                            </div>
+                        `;
+                        cardsContainer.appendChild(card);
+                    });
+                }
+
+                container.appendChild(col);
+            });
+        }
+
+        // ================= KANBAN DRAG & DROP HANDLERS =================
+        let draggedCard = null;
+
+        function dragStart(e) {
+            draggedCard = this;
+            this.classList.add("dragging");
+            e.dataTransfer.setData("text/plain", this.getAttribute("data-lead-id"));
+            e.dataTransfer.effectAllowed = "move";
+        }
+
+        function dragEnd() {
+            this.classList.remove("dragging");
+            draggedCard = null;
+            // Remove drop indicators across all stages
+            document.querySelectorAll(".kanban-column").forEach(col => {
+                col.classList.remove("drag-over");
+            });
+        }
+
+        function dragOver(e) {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = "move";
+        }
+
+        function dragEnter(e) {
+            e.preventDefault();
+            this.classList.add("drag-over");
+        }
+
+        function dragLeave() {
+            this.classList.remove("drag-over");
+        }
+
+        function dragDrop(e) {
+            e.preventDefault();
+            this.classList.remove("drag-over");
+            
+            const leadId = e.dataTransfer.getData("text/plain");
+            const newStage = this.getAttribute("data-stage-id");
+            
+            const leadObj = leads.find(l => l.id === leadId);
+            if (leadObj && leadObj.stage !== newStage) {
+                const oldStageName = stages.find(s => s.id === leadObj.stage).name;
+                const newStageName = stages.find(s => s.id === newStage).name;
+                
+                // Update stage
+                leadObj.stage = newStage;
+                
+                // Add activity audit logs
+                const timestamp = new Date().toLocaleString('vi-VN');
+                leadObj.history.unshift({
+                    time: timestamp,
+                    action: `Chuyển giai đoạn Kanban từ [${oldStageName}] sang [${newStageName}].`
+                });
+
+                showNotification(`Đã chuyển ${leadObj.fullName} sang [${newStageName}]`, "success");
+                refreshAllViews();
+            }
+        }
+
+        // ================= RENDERING: TASKS MODULE =================
+        let currentTasksFilter = 'all';
+
+        function renderTasksList() {
+            const container = document.getElementById("tasks-table-list");
+            container.innerHTML = "";
+
+            let filteredTasks = tasks;
+            if (currentTasksFilter === "today") {
+                filteredTasks = tasks.filter(t => t.dueDate.includes("Hôm nay"));
+            } else if (currentTasksFilter === "overdue") {
+                filteredTasks = tasks.filter(t => t.isOverdue && !t.completed);
+            } else if (currentTasksFilter === "completed") {
+                filteredTasks = tasks.filter(t => t.completed);
+            }
+
+            if (filteredTasks.length === 0) {
+                container.innerHTML = `
+                    <div class="py-12 text-xs text-slate-grey/40 text-center font-medium">
+                        Không có công việc nào thuộc danh mục này.
+                    </div>
+                `;
+                return;
+            }
+
+            filteredTasks.forEach(task => {
+                let priorityClass = "bg-slate-grey/10 text-slate-grey";
+                let priorityText = "Thấp";
+                if (task.priority === "high") {
+                    priorityClass = "bg-status-error/10 text-status-error";
+                    priorityText = "Cao";
+                } else if (task.priority === "medium") {
+                    priorityClass = "bg-status-warning/10 text-status-warning";
+                    priorityText = "Trung bình";
+                }
+
+                let dateClass = "text-slate-grey/60";
+                if (task.isOverdue && !task.completed) {
+                    dateClass = "text-status-error font-semibold";
+                }
+
+                const taskRow = document.createElement("div");
+                taskRow.className = `grid grid-cols-12 gap-4 px-6 py-4 items-center transition-all ${task.completed ? 'bg-subtle-grey/30 opacity-70' : 'hover:bg-subtle-grey/30'}`;
+                taskRow.innerHTML = `
+                    <div class="col-span-1 flex justify-center">
+                        <input type="checkbox" class="rounded-full border-slate-grey/25 text-primary focus:ring-primary w-5 h-5 cursor-pointer" ${task.completed ? 'checked' : ''} onchange="toggleTaskComplete('${task.id}', this)"/>
+                    </div>
+                    <div class="col-span-5 pr-4">
+                        <p class="text-xs font-semibold text-slate-grey ${task.completed ? 'line-through text-slate-grey/40' : ''}">${task.title}</p>
+                    </div>
+                    <div class="col-span-2 text-xs font-medium text-slate-grey/70 hover:text-primary cursor-pointer" onclick="openLeadProfile('${task.leadId}')">${task.leadName}</div>
+                    <div class="col-span-2">
+                        <span class="px-2.5 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider ${priorityClass}">${priorityText}</span>
+                    </div>
+                    <div class="col-span-2 text-[10px] ${dateClass} flex items-center gap-1">
+                        <span class="material-symbols-outlined text-[12px]">schedule</span> ${task.dueDate}
+                    </div>
+                `;
+                container.appendChild(taskRow);
+            });
+        }
+
+        function filterTasks(filterType) {
+            currentTasksFilter = filterType;
+            
+            const btnIds = ["all", "today", "overdue", "completed"];
+            btnIds.forEach(id => {
+                const el = document.getElementById("task-filter-" + id);
+                el.className = "px-4 py-2 text-xs font-semibold rounded-full bg-white text-slate-grey/60 border border-slate-grey/10 hover:text-slate-grey transition-all focus:outline-none";
+            });
+
+            const activeBtn = document.getElementById("task-filter-" + filterType);
+            activeBtn.className = "px-4 py-2 text-xs font-semibold rounded-full bg-primary text-white transition-all shadow-sm focus:outline-none";
+
+            renderTasksList();
+        }
+
+        function toggleTaskComplete(taskId, checkbox) {
+            const task = tasks.find(t => t.id === taskId);
+            if (task) {
+                task.completed = checkbox.checked;
+                
+                // Add lead history note
+                const leadObj = leads.find(l => l.id === task.leadId);
+                if (leadObj) {
+                    const timestamp = new Date().toLocaleString('vi-VN');
+                    leadObj.history.unshift({
+                        time: timestamp,
+                        action: `${task.completed ? 'Hoàn thành' : 'Khai mở lại'} nhiệm vụ: "${task.title}".`
+                    });
+                }
+
+                showNotification(task.completed ? "Đã đánh dấu hoàn thành công việc!" : "Đã mở lại công việc", "success");
+                refreshAllViews();
+                
+                // If currently viewed in detail, refresh detail view
+                if (activeTab === "lead-detail" && selectedLeadId === task.leadId) {
+                    renderLeadDetail(selectedLeadId);
+                }
+            }
+        }
+
+        // ================= RENDERING: CUSTOMER LIST =================
+        let customerSearchQuery = "";
+        let filterCustomerSegment = "all";
+        let filterCustomerInterest = "all";
+
+        function renderCustomersTable() {
+            const tbody = document.getElementById("customers-table-body");
+            tbody.innerHTML = "";
+
+            let displayList = leads;
+
+            // Apply search filter
+            if (customerSearchQuery.trim() !== "") {
+                const q = customerSearchQuery.toLowerCase();
+                displayList = displayList.filter(c => 
+                    c.fullName.toLowerCase().includes(q) || 
+                    c.phone.includes(q) || 
+                    (c.email && c.email.toLowerCase().includes(q)) ||
+                    (c.company && c.company.toLowerCase().includes(q))
+                );
+            }
+
+            // Apply segment filter
+            if (filterCustomerSegment !== "all") {
+                displayList = displayList.filter(c => c.segment === filterCustomerSegment);
+            }
+
+            // Apply interest filter
+            if (filterCustomerInterest !== "all") {
+                displayList = displayList.filter(c => c.interests.some(i => i.includes(filterCustomerInterest)));
+            }
+
+            document.getElementById("customers-shown-count").innerText = displayList.length;
+            document.getElementById("customers-total-count").innerText = leads.length;
+
+            if (displayList.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="py-12 text-center text-xs text-slate-grey/40 font-medium">Không tìm thấy khách hàng phù hợp.</td>
+                    </tr>
+                `;
+                return;
+            }
+
+            displayList.forEach(client => {
+                const tr = document.createElement("tr");
+                tr.className = "hover:bg-subtle-grey/30 transition-all cursor-pointer group";
+                
+                let segmentClass = "bg-status-info/10 text-status-info";
+                if (client.segment.includes("VIP")) {
+                    segmentClass = "bg-primary/10 text-primary";
+                } else if (client.segment === "Doanh nghiệp") {
+                    segmentClass = "bg-purple-500/10 text-purple-600";
+                }
+
+                tr.innerHTML = `
+                    <td class="px-6 py-4.5" onclick="event.stopPropagation()"><input class="rounded border-slate-grey/15 text-primary focus:ring-primary w-4.5 h-4.5" type="checkbox"/></td>
+                    <td class="px-6 py-4.5" onclick="openLeadProfile('${client.id}')">
+                        <div class="flex items-center gap-3">
+                            <div class="w-9 h-9 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-xs flex-shrink-0">${getInitialLetters(client.fullName)}</div>
+                            <div>
+                                <p class="font-bold text-xs text-slate-grey group-hover:text-primary transition-colors">${client.fullName}</p>
+                                <p class="text-[10px] text-slate-grey/40">${client.email || 'Không có email'}</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4.5 text-xs text-slate-grey/75 font-semibold" onclick="openLeadProfile('${client.id}')">${client.company || 'Cá nhân'}</td>
+                    <td class="px-6 py-4.5" onclick="openLeadProfile('${client.id}')">
+                        <span class="px-2.5 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider ${segmentClass}">${client.segment}</span>
+                    </td>
+                    <td class="px-6 py-4.5 text-xs text-slate-grey/75 font-medium" onclick="openLeadProfile('${client.id}')">${client.interests.join(', ')}</td>
+                    <td class="px-6 py-4.5" onclick="openLeadProfile('${client.id}')">
+                        <div class="flex items-center gap-2">
+                            <div class="w-5 h-5 rounded-full bg-slate-grey/20 flex items-center justify-center text-[8px] font-bold">ML</div>
+                            <span class="text-xs font-semibold text-slate-grey/80">${client.assignedTo}</span>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4.5" onclick="event.stopPropagation()">
+                        <button class="text-slate-grey/30 hover:text-primary transition-all p-1" onclick="openLeadProfile('${client.id}')" title="Xem hồ sơ">
+                            <span class="material-symbols-outlined text-[20px]">visibility</span>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function handleCustomerSearch(val) {
+            customerSearchQuery = val;
+            renderCustomersTable();
+        }
+
+        function handleCustomerFilters() {
+            filterCustomerSegment = document.getElementById("customer-segment-select").value;
+            filterCustomerInterest = document.getElementById("customer-interest-select").value;
+            renderCustomersTable();
+        }
+
+        function resetCustomerFilters() {
+            document.getElementById("customer-search-input").value = "";
+            document.getElementById("customer-segment-select").value = "all";
+            document.getElementById("customer-interest-select").value = "all";
+            customerSearchQuery = "";
+            filterCustomerSegment = "all";
+            filterCustomerInterest = "all";
+            renderCustomersTable();
+            showNotification("Đã đặt lại tất cả bộ lọc khách hàng!", "success");
+        }
+
+        function handleGlobalSearch(val) {
+            // Sync with other searches
+            customerSearchQuery = val;
+            document.getElementById("customer-search-input").value = val;
+            
+            // Switch view automatically to customer or kanban if they are typing global
+            if (activeTab !== "customers" && activeTab !== "kanban" && activeTab !== "dashboard" && val.trim() !== "") {
+                switchTab("customers");
+            }
+            renderCustomersTable();
+        }
+
+        // ================= IMPORT & EXPORT CSV SYSTEM =================
+        function handleImportCSV() {
+            // Simulated premium upload dialog
+            showNotification("Đang thiết lập kênh nhập dữ liệu CSV...", "info");
+            
+            setTimeout(() => {
+                // Add 5 mock users automatically
+                const mockImports = [
+                    {
+                        id: "import-1",
+                        fullName: "Trần Thế Anh",
+                        company: "Vinhomes Group",
+                        segment: "VIP Platinum",
+                        phone: "0909.888.777",
+                        email: "theanh@vinhomes.vn",
+                        address: "Hà Nội",
+                        interests: ["Trẻ hóa da Thermage FLX"],
+                        expectedValue: 35000000,
+                        stage: "stage-new",
+                        assignedTo: "Quốc Bảo Sales",
+                        createdAt: "18/05/2026",
+                        notes: [],
+                        history: [{ time: "18/05/2026 10:30", action: "Nhập dữ liệu thành công từ file CSV." }]
+                    },
+                    {
+                        id: "import-2",
+                        fullName: "Phan Hoài Nam",
+                        company: "Techcombank",
+                        segment: "Doanh nghiệp",
+                        phone: "0911.222.888",
+                        email: "namph@techcombank.com.vn",
+                        address: "TP. Hồ Chí Minh",
+                        interests: ["Liệu trình Giảm béo chuyên sâu"],
+                        expectedValue: 22000000,
+                        stage: "stage-contact",
+                        assignedTo: "Thu Hà Sales",
+                        createdAt: "18/05/2026",
+                        notes: [],
+                        history: [{ time: "18/05/2026 10:30", action: "Nhập dữ liệu thành công từ file CSV." }]
+                    }
+                ];
+
+                leads = [...leads, ...mockImports];
+                showNotification("Nhập thành công 2 Khách hàng tiềm năng mới từ tệp CSV!", "success");
+                refreshAllViews();
+            }, 1000);
+        }
+
+        function handleExportCSV() {
+            showNotification("Đang tạo tệp CSV xuất dữ liệu...", "info");
+
+            setTimeout(() => {
+                // Generate CSV string
+                let csvContent = "\uFEFF"; // BOM for UTF-8 Vietnamese accents
+                csvContent += "Tên Khách Hàng,Số Điện Thoại,Email,Công Ty,Phân Khúc,Sản Phẩm Quan Tâm,Giá Trị Dự Kiến,Giai Đoạn,Nhân Viên Phụ Trách\n";
+                
+                leads.forEach(c => {
+                    const row = [
+                        `"${c.fullName}"`,
+                        `"${c.phone}"`,
+                        `"${c.email || ''}"`,
+                        `"${c.company || ''}"`,
+                        `"${c.segment}"`,
+                        `"${c.interests.join(' | ')}"`,
+                        c.expectedValue,
+                        `"${stages.find(s => s.id === c.stage).name}"`,
+                        `"${c.assignedTo}"`
+                    ];
+                    csvContent += row.join(",") + "\n";
+                });
+
+                // Download trigger
+                const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement("a");
+                link.setAttribute("href", url);
+                link.setAttribute("download", `saigonsmile_crm_leads_${new Date().toISOString().slice(0,10)}.csv`);
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+                showNotification("Tải tệp CSV thành công về máy tính của bạn!", "success");
+            }, 1000);
+        }
+
+        // ================= RENDERING: PAYMENTS MODULE =================
+        function renderPaymentsTable() {
+            const tbody = document.getElementById("payments-table-body");
+            tbody.innerHTML = "";
+
+            payments.forEach(pay => {
+                const tr = document.createElement("tr");
+                tr.className = "hover:bg-subtle-grey/30 transition-all";
+                
+                let badgeClass = "bg-status-success/10 text-status-success";
+                if (pay.status === "Đang xử lý") {
+                    badgeClass = "bg-status-warning/10 text-status-warning";
+                }
+
+                tr.innerHTML = `
+                    <td class="px-6 py-4.5 flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-full bg-slate-grey/10 text-slate-grey font-bold text-xs flex items-center justify-center">${getInitialLetters(pay.leadName)}</div>
+                        <span class="font-bold text-xs text-slate-grey">${pay.leadName}</span>
+                    </td>
+                    <td class="px-6 py-4.5 text-xs text-slate-grey/80 font-medium">${pay.service}</td>
+                    <td class="px-6 py-4.5 text-xs font-bold text-slate-grey">${formatVND(pay.amount)}</td>
+                    <td class="px-6 py-4.5">
+                        <span class="px-2.5 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider ${badgeClass}">
+                            ${pay.status}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4.5 text-xs text-slate-grey/60 font-semibold">${pay.method}</td>
+                    <td class="px-6 py-4.5 text-[10px] text-slate-grey/40 font-medium">${pay.date}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function renderPaymentsOverview() {
+            const totalRevenue = payments.reduce((sum, curr) => sum + Number(curr.amount), 0);
+            const collected = payments.filter(p => p.status === "Hoàn thành").reduce((sum, curr) => sum + Number(curr.amount), 0);
+            const pending = payments.filter(p => p.status === "Đang xử lý").reduce((sum, curr) => sum + Number(curr.amount), 0);
+
+            document.getElementById("payment-stat-total").innerText = formatVND(totalRevenue).replace(' VND', '');
+            document.getElementById("payment-stat-collected").innerText = formatVND(collected).replace(' VND', '');
+            document.getElementById("payment-stat-pending").innerText = formatVND(pending).replace(' VND', '');
+
+            // Calculate progress bar percent
+            const percent = totalRevenue > 0 ? (collected / totalRevenue) * 100 : 0;
+            document.getElementById("payment-progress-bar").style.width = `${percent}%`;
+            
+            // June cashflow height adjustment
+            const juneValText = (totalRevenue / 1000000).toFixed(1) + "M";
+            document.getElementById("chart-height-june").innerText = juneValText;
+        }
+
+        // ================= DETAILED LEAD VIEW =================
+        function openLeadProfile(leadId) {
+            selectedLeadId = leadId;
+            renderLeadDetail(leadId);
+            switchTab("lead-detail");
+        }
+
+        function renderLeadDetail(leadId) {
+            const lead = leads.find(l => l.id === leadId);
+            if (!lead) return;
+
+            // Fill left profile cards
+            document.getElementById("detail-name").innerText = lead.fullName;
+            document.getElementById("detail-company").innerText = lead.company || "Cá nhân";
+            document.getElementById("detail-phone").innerText = lead.phone;
+            document.getElementById("detail-email").innerText = lead.email || "Không có email";
+            document.getElementById("detail-address").innerText = lead.address || "Hà Nội";
+            document.getElementById("detail-value").innerText = formatVND(lead.expectedValue);
+            
+            const badge = document.getElementById("detail-segment-badge");
+            badge.innerText = lead.segment;
+            let segmentClass = "bg-status-info/10 text-status-info";
+            if (lead.segment.includes("VIP")) {
+                segmentClass = "bg-primary/10 text-primary";
+            } else if (lead.segment === "Doanh nghiệp") {
+                segmentClass = "bg-purple-500/10 text-purple-600";
+            }
+            badge.className = `px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider mb-6 ${segmentClass}`;
+
+            const avatarContainer = document.getElementById("detail-avatar-container");
+            avatarContainer.innerText = getInitialLetters(lead.fullName);
+
+            // Render interests tags
+            const tagContainer = document.getElementById("detail-interests-tags");
+            tagContainer.innerHTML = "";
+            lead.interests.forEach(interest => {
+                const span = document.createElement("span");
+                span.className = "px-2.5 py-1 bg-subtle-grey text-slate-grey/70 text-[10px] rounded-lg border border-slate-grey/5 font-semibold";
+                span.innerText = interest;
+                tagContainer.appendChild(span);
+            });
+
+            // Render stage dropdown menu elements
+            const dropdown = document.getElementById("stage-dropdown-menu");
+            dropdown.innerHTML = "";
+            stages.forEach(s => {
+                const opt = document.createElement("button");
+                opt.className = `w-full text-left px-4 py-2.5 text-xs transition-colors hover:bg-subtle-grey flex justify-between items-center ${lead.stage === s.id ? 'text-primary font-bold bg-primary-container/20' : 'text-slate-grey font-medium'}`;
+                opt.innerHTML = `
+                    <span>${s.name}</span>
+                    ${lead.stage === s.id ? '<span class="material-symbols-outlined text-[16px]">check</span>' : ''}
+                `;
+                opt.onclick = () => updateLeadStage(lead.id, s.id);
+                dropdown.appendChild(opt);
+            });
+
+            // Render Notes Tab
+            renderLeadNotes(lead);
+            
+            // Render Tasks Tab
+            renderLeadTasks(lead);
+
+            // Render Audit History logs tab
+            renderLeadHistory(lead);
+        }
+
+        function renderLeadNotes(lead) {
+            const container = document.getElementById("lead-notes-timeline");
+            container.innerHTML = "";
+
+            if (lead.notes.length === 0) {
+                container.innerHTML = `<div class="py-8 text-center text-xs font-semibold text-slate-grey/30">Chưa có ghi chú nào. Hãy thêm ghi chú đầu tiên ở trên!</div>`;
+                return;
+            }
+
+            lead.notes.forEach(note => {
+                const noteDiv = document.createElement("div");
+                noteDiv.className = "relative mb-6 last:mb-0";
+                noteDiv.innerHTML = `
+                    <span class="absolute -left-[30px] top-1 w-3 h-3 rounded-full bg-primary border-2 border-white ring-4 ring-primary/10"></span>
+                    <div class="flex items-center gap-2 mb-1.5 text-[10px] text-slate-grey/40 font-bold uppercase">
+                        <span>${note.author}</span>
+                        <span>•</span>
+                        <span>${note.time}</span>
+                    </div>
+                    <p class="text-xs text-slate-grey leading-relaxed bg-[#FAFAFA] p-3 rounded-xl border border-slate-grey/5 font-medium">${note.content}</p>
+                `;
+                container.appendChild(noteDiv);
+            });
+        }
+
+        function addLeadNoteSubmit() {
+            const textInput = document.getElementById("note-input-text");
+            const content = textInput.value.trim();
+            if (content === "") {
+                showNotification("Nội dung ghi chú không được để trống!", "error");
+                return;
+            }
+
+            const lead = leads.find(l => l.id === selectedLeadId);
+            if (lead) {
+                const timestamp = new Date().toLocaleString('vi-VN');
+                
+                // Add note to top
+                lead.notes.unshift({
+                    time: timestamp,
+                    author: currentUser.fullName,
+                    content: content
+                });
+
+                // Add audit history
+                lead.history.unshift({
+                    time: timestamp,
+                    action: "Thêm ghi chú cuộc gọi thành công."
+                });
+
+                textInput.value = "";
+                showNotification("Đã lưu ghi chú mới thành công!", "success");
+                
+                renderLeadDetail(selectedLeadId);
+                refreshAllViews();
+            }
+        }
+
+        function renderLeadTasks(lead) {
+            const container = document.getElementById("lead-tasks-list");
+            container.innerHTML = "";
+
+            const leadTasks = tasks.filter(t => t.leadId === lead.id);
+            if (leadTasks.length === 0) {
+                container.innerHTML = `<div class="py-8 text-center text-xs font-semibold text-slate-grey/30">Không có công việc nào gắn với khách hàng này.</div>`;
+                return;
+            }
+
+            leadTasks.forEach(task => {
+                let priorityClass = "bg-slate-grey/10 text-slate-grey";
+                if (task.priority === "high") {
+                    priorityClass = "bg-status-error/10 text-status-error";
+                } else if (task.priority === "medium") {
+                    priorityClass = "bg-status-warning/10 text-status-warning";
+                }
+
+                const taskDiv = document.createElement("div");
+                taskDiv.className = `flex justify-between items-center py-3 ${task.completed ? 'opacity-50' : ''}`;
+                taskDiv.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <input type="checkbox" class="rounded-full border-slate-grey/25 text-primary focus:ring-primary w-4.5 h-4.5 cursor-pointer" ${task.completed ? 'checked' : ''} onchange="toggleTaskComplete('${task.id}', this)"/>
+                        <span class="text-xs font-semibold text-slate-grey ${task.completed ? 'line-through' : ''}">${task.title}</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="px-2 py-0.5 rounded-full text-[8px] font-bold uppercase tracking-wider ${priorityClass}">${task.priority}</span>
+                        <span class="text-[9px] text-slate-grey/40 font-semibold">${task.dueDate}</span>
+                    </div>
+                `;
+                container.appendChild(taskDiv);
+            });
+        }
+
+        function renderLeadHistory(lead) {
+            const container = document.getElementById("lead-history-timeline");
+            container.innerHTML = "";
+
+            lead.history.forEach(log => {
+                const logDiv = document.createElement("div");
+                logDiv.className = "relative mb-6 last:mb-0";
+                logDiv.innerHTML = `
+                    <span class="absolute -left-[30px] top-1.5 w-2 h-2 rounded-full bg-slate-grey/30 border-2 border-white ring-4 ring-slate-grey/5"></span>
+                    <div class="flex items-center gap-2 mb-1.5 text-[10px] text-slate-grey/40 font-bold uppercase">
+                        <span>Hệ thống</span>
+                        <span>•</span>
+                        <span>${log.time}</span>
+                    </div>
+                    <p class="text-xs text-slate-grey/85 leading-relaxed font-semibold">${log.action}</p>
+                `;
+                container.appendChild(logDiv);
+            });
+        }
+
+        function toggleStageDropdown(e) {
+            e.stopPropagation();
+            const dropdown = document.getElementById("stage-dropdown-menu");
+            dropdown.classList.toggle("hidden");
+            
+            // Close dropdown if click outside
+            document.addEventListener("click", function closeMenu() {
+                dropdown.classList.add("hidden");
+                document.removeEventListener("click", closeMenu);
+            });
+        }
+
+        function updateLeadStage(leadId, stageId) {
+            const lead = leads.find(l => l.id === leadId);
+            if (lead && lead.stage !== stageId) {
+                const oldStageName = stages.find(s => s.id === lead.stage).name;
+                const newStageName = stages.find(s => s.id === stageId).name;
+
+                lead.stage = stageId;
+                
+                const timestamp = new Date().toLocaleString('vi-VN');
+                lead.history.unshift({
+                    time: timestamp,
+                    action: `Thay đổi giai đoạn cơ hội từ [${oldStageName}] sang [${newStageName}].`
+                });
+
+                showNotification(`Đã chuyển đổi trạng thái cơ hội sang [${newStageName}]`, "success");
+                renderLeadDetail(leadId);
+                refreshAllViews();
+            }
+        }
+
+        function switchDetailTab(panelType) {
+            const tabIds = ["notes", "tasks", "history"];
+            tabIds.forEach(id => {
+                const btn = document.getElementById("tab-btn-" + id);
+                btn.className = "flex-1 py-3 text-xs font-semibold rounded-xl text-slate-grey/60 hover:text-slate-grey focus:outline-none transition-all";
+                document.getElementById("tab-panel-" + id).classList.add("hidden");
+            });
+
+            const activeBtn = document.getElementById("tab-btn-" + panelType);
+            activeBtn.className = "flex-1 py-3 text-xs font-bold rounded-xl text-primary bg-primary-container/60 focus:outline-none transition-all";
+            
+            document.getElementById("tab-panel-" + panelType).classList.remove("hidden");
+        }
+
+        // ================= SLIDE-OVER PANELS =================
+        function openAddLeadPanel() {
+            document.getElementById("slideover-lead-panel").classList.remove("hidden");
+            // Clear inputs
+            document.getElementById("add-lead-name").value = "";
+            document.getElementById("add-lead-phone").value = "";
+            document.getElementById("add-lead-email").value = "";
+            document.getElementById("add-lead-address").value = "Hà Nội";
+            document.getElementById("add-lead-company").value = "";
+            document.getElementById("add-lead-value").value = "";
+            
+            // Reset chips
+            document.querySelectorAll(".interest-chip").forEach(chip => {
+                chip.classList.remove("bg-primary", "text-white", "border-primary");
+                chip.classList.add("bg-[#FAFAFA]", "text-slate-grey/60", "border-slate-grey/10");
+            });
+        }
+
+        function closeAddLeadPanel() {
+            document.getElementById("slideover-lead-panel").classList.add("hidden");
+        }
+
+        function toggleChip(btn) {
+            if (btn.classList.contains("bg-primary")) {
+                btn.classList.remove("bg-primary", "text-white", "border-primary");
+                btn.classList.add("bg-[#FAFAFA]", "text-slate-grey/60", "border-slate-grey/10");
+            } else {
+                btn.classList.add("bg-primary", "text-white", "border-primary");
+                btn.classList.remove("bg-[#FAFAFA]", "text-slate-grey/60", "border-slate-grey/10");
+            }
+        }
+
+        function addLeadSubmit() {
+            const name = document.getElementById("add-lead-name").value.trim();
+            const phone = document.getElementById("add-lead-phone").value.trim();
+            const email = document.getElementById("add-lead-email").value.trim();
+            const address = document.getElementById("add-lead-address").value.trim();
+            const company = document.getElementById("add-lead-company").value.trim();
+            const segment = document.getElementById("add-lead-segment").value;
+            const value = document.getElementById("add-lead-value").value || 0;
+            const stage = document.getElementById("add-lead-stage").value;
+
+            if (name === "" || phone === "") {
+                showNotification("Vui lòng điền đầy đủ các trường bắt buộc (*)", "error");
+                return;
+            }
+
+            // Get selected chips
+            const selectedInterests = [];
+            document.querySelectorAll(".interest-chip.bg-primary").forEach(chip => {
+                selectedInterests.push(chip.innerText);
+            });
+            if (selectedInterests.length === 0) {
+                selectedInterests.push("Tư vấn liệu trình Spa");
+            }
+
+            const newId = "lead-" + (leads.length + 1);
+            const timestamp = new Date().toLocaleString('vi-VN');
+
+            const newLead = {
+                id: newId,
+                fullName: name,
+                company: company,
+                segment: segment,
+                phone: phone,
+                email: email,
+                address: address,
+                interests: selectedInterests,
+                expectedValue: Number(value),
+                stage: stage,
+                assignedTo: currentUser.fullName,
+                createdAt: timestamp.split(" ")[0],
+                notes: [],
+                history: [{ time: timestamp, action: "Khởi tạo hồ sơ khách hàng mới." }]
+            };
+
+            leads.push(newLead);
+            
+            // Add automatic welcome task
+            tasks.push({
+                id: "task-" + (tasks.length + 1),
+                leadId: newId,
+                leadName: name,
+                title: `Gọi điện tư vấn lộ trình dịch vụ "${selectedInterests[0]}" cho khách hàng mới`,
+                priority: "medium",
+                dueDate: "Ngày mai, 09:00",
+                isOverdue: false,
+                completed: false
+            });
+
+            closeAddLeadPanel();
+            showNotification(`Đã thêm thành công khách hàng: ${name}!`, "success");
+            refreshAllViews();
+        }
+
+        // ================= SLIDE-OVER RECORD PAYMENTS =================
+        function openAddPaymentPanel() {
+            document.getElementById("slideover-payment-panel").classList.remove("hidden");
+            
+            // Populate clients dropdown selection
+            const select = document.getElementById("add-pay-client");
+            select.innerHTML = "";
+            leads.forEach(c => {
+                const opt = document.createElement("option");
+                opt.value = c.fullName;
+                opt.innerText = `${c.fullName} (${c.company || 'Cá nhân'})`;
+                select.appendChild(opt);
+            });
+            
+            document.getElementById("add-pay-service").value = "";
+            document.getElementById("add-pay-amount").value = "";
+        }
+
+        function closeAddPaymentPanel() {
+            document.getElementById("slideover-payment-panel").classList.add("hidden");
+        }
+
+        function addPaymentSubmit() {
+            const clientName = document.getElementById("add-pay-client").value;
+            const service = document.getElementById("add-pay-service").value.trim();
+            const amount = document.getElementById("add-pay-amount").value;
+            const status = document.getElementById("add-pay-status").value;
+            const method = document.getElementById("add-pay-method").value;
+
+            if (service === "" || !amount) {
+                showNotification("Vui lòng nhập đầy đủ các trường yêu cầu!", "error");
+                return;
+            }
+
+            const timestamp = new Date().toLocaleString('vi-VN');
+            const newPayment = {
+                id: "pay-" + (payments.length + 1),
+                leadName: clientName,
+                service: service,
+                amount: Number(amount),
+                method: method,
+                status: status,
+                date: timestamp.slice(0, 16)
+            };
+
+            payments.push(newPayment);
+            closeAddPaymentPanel();
+            showNotification("Đã ghi nhận giao dịch tài chính thành công!", "success");
+            refreshAllViews();
+        }
+
+        // ================= SETTINGS PROFILE SAVING =================
+        function switchSettingsTab(tabType) {
+            const tabIds = ["profile", "security", "members"];
+            tabIds.forEach(id => {
+                const btn = document.getElementById("set-btn-" + id);
+                btn.className = "flex items-center gap-3 px-5 py-4 text-slate-grey/70 hover:bg-white hover:shadow-sm rounded-xl text-xs font-semibold transition-all text-left focus:outline-none";
+                document.getElementById("set-panel-" + id).classList.add("hidden");
+            });
+
+            const activeBtn = document.getElementById("set-btn-" + tabType);
+            activeBtn.className = "flex items-center gap-3 px-5 py-4 bg-primary text-white shadow-md rounded-xl text-xs font-bold transition-all text-left focus:outline-none";
+            
+            document.getElementById("set-panel-" + tabType).classList.remove("hidden");
+        }
+
+        function saveProfileChanges() {
+            const newName = document.getElementById("set-profile-name").value.trim();
+            const newPhone = document.getElementById("set-profile-phone").value.trim();
+            const newTitle = document.getElementById("set-profile-title").value.trim();
+
+            if (newName === "" || newPhone === "") {
+                showNotification("Họ tên và số điện thoại không được để trống!", "error");
+                return;
+            }
+
+            currentUser.fullName = newName;
+            currentUser.phone = newPhone;
+            currentUser.title = newTitle;
+
+            // Sync with elements
+            document.getElementById("sidebar-name").innerText = newName;
+            document.getElementById("set-profile-name").value = newName;
+            
+            showNotification("Cập nhật thông tin hồ sơ cá nhân thành công!", "success");
+            refreshAllViews();
+        }
+    </script>
+</body>
+</html>
