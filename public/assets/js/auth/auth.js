@@ -62,7 +62,7 @@ const AuthService = {
     // 4. Kiểm tra phiên đăng nhập (Route Guard)
     async checkSession() {
         // Nếu ở trang login, và đã có session -> chuyển về dashboard
-        const isLoginPage = window.location.pathname.includes('login.html') || window.location.pathname === '/' || window.location.pathname.endsWith('/CRM/');
+        const isLoginPage = window.location.pathname.includes('login') || window.location.pathname === '/' || window.location.pathname.endsWith('/CRM/');
         
         let user = null;
 
