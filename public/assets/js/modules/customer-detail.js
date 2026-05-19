@@ -641,12 +641,17 @@ const CustomerDetailModule = {
                 }
 
                 try {
-                    const { error } = await window.supabaseClient
+                    const { data, error } = await window.supabaseClient
                         .from('customers')
                         .update(updated)
-                        .eq('id', this.customerId);
+                        .eq('id', this.customerId)
+                        .select();
 
                     if (error) throw error;
+                    
+                    if (!data || data.length === 0) {
+                        throw new Error('Bạn không có quyền chỉnh sửa khách hàng này (Bị chặn bởi phân quyền RLS) hoặc khách hàng không tồn tại.');
+                    }
 
                     this.customer = { ...this.customer, ...updated };
                     this.renderProfile();
